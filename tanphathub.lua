@@ -1562,7 +1562,7 @@ SectionServer.CreateButton({ Title = "Hop Server" }, function()
 end)
 function HopLessAll()
 	require(game:GetService("ReplicatedStorage").Notification)
-		.new("<Color=Red>Banana Hub : Hop Server<Color=/>")
+		.new("<Color=Red>TanPhat Hub : Hop Server<Color=/>")
 		:Display()
 	local K, R, m, E = game.PlaceId, {}, "", os.date("!*t").hour
 	if
@@ -18885,7 +18885,7 @@ local b = {
 	Username = "Binini Hub",
 	AvatarURL = "https://images-ext-1.discordapp.net/external/9LSZu__Uvs7I0N8MWag-JmwF2iT-pHCHSe2UdixGEXQ/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1262364141968949308/a_0c5fb64e2cbb35d029d73b44576c6a60.gif",
 	BannerURL = "https://cdn.discordapp.com/attachments/1017024488665264218/1262729537578471504/banner_server.jpg",
-	Title = "Banana Hub Notification",
+	Title = "TanPhat Notification",
 	FooterText = "Binini Hub",
 	Color = 16776960,
 }
@@ -18985,7 +18985,7 @@ function Webhookprofile()
 			BannerURL = "https://cdn.discordapp.com/attachments/1017024488665264218/1262729537578471504/banner_server.jpg",
 			AvatarURL = "https://images-ext-1.discordapp.net/external/9LSZu__Uvs7I0N8MWag-JmwF2iT-pHCHSe2UdixGEXQ/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1262364141968949308/a_0c5fb64e2cbb35d029d73b44576c6a60.gif",
 			Username = "Binini Hub",
-			Title = "<:bananacon:1261744974534541352> Banana Hub Notification <:bananacon:1261744974534541352>",
+			Title = "<:bananacon:1261744974534541352> TanPhat Notification <:bananacon:1261744974534541352>",
 			FooterText = "Binini Hub",
 			FruitMinValue = 1000000,
 			ItemMinRarity = 3,
