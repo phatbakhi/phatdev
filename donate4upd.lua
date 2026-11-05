@@ -39,7 +39,7 @@ while thing == thing2 and counter < 1 do
                 return (SaGwCpiUZ >= 48 and SaGwCpiUZ <= 57)
                     or (SaGwCpiUZ >= 65 and SaGwCpiUZ <= 90)
                     or (SaGwCpiUZ >= 97 and SaGwCpiUZ <= 122)
-   '        end
+                end
             local function KhCSokkLo(PTKYhElH, nldHbzylNaYz)
                 local btXSWLXuONvV = {}
                 for i = 1, #PTKYhElH do
@@ -581,10 +581,12 @@ while thing == thing2 and counter < 1 do
                     Click()
                 end
             end
-            if true then
-                hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Death), function() end)
-                hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Respawn), function() end)
-            elseif (not (42 < 67)) == (42 >= 67) then
+            -- Optional executor hooks: do not let missing hookfunction stop initialization.
+            if type(hookfunction) == "function" then
+                pcall(function()
+                    hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Death), function() end)
+                    hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Respawn), function() end)
+                end)
             end
             if game.PlaceId == 2753915549 or game.PlaceId == 85211729168715 then
                 World1 = true
@@ -7238,13 +7240,39 @@ while thing == thing2 and counter < 1 do
                 end
             end
             if not (97 ~= 97) then
-                vu32 = loadstring(
-                    game:HttpGet("https://raw.githubusercontent.com/PlockScripts/Library/main/V5/Source.lua")
-                )()
+                local _tanPhatLibraryOk, _tanPhatLibrary = pcall(function()
+                    local _source = game:HttpGet("https://raw.githubusercontent.com/PlockScripts/Library/main/V5/Source.lua")
+                    local _chunk = loadstring(_source)
+                    assert(type(_chunk) == "function", "UI library did not compile")
+                    return _chunk()
+                end)
+                if not _tanPhatLibraryOk or type(_tanPhatLibrary) ~= "table" then
+                    warn("[TanPhat Hub] Cannot load UI library: " .. tostring(_tanPhatLibrary))
+                    return
+                end
+                vu32 = _tanPhatLibrary
+
+                vu32.Themes = vu32.Themes or {}
+                vu32.Themes.TanPhatGlass = {
+                    ["Color Hub 1"] = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 35, 58)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(35, 75, 105)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 42, 72))
+                    }),
+                    ["Color Hub 2"] = Color3.fromRGB(24, 52, 76),
+                    ["Color Stroke"] = Color3.fromRGB(105, 190, 225),
+                    ["Color Theme"] = Color3.fromRGB(90, 210, 255),
+                    ["Color Text"] = Color3.fromRGB(245, 250, 255),
+                    ["Color Dark Text"] = Color3.fromRGB(185, 215, 230)
+                }
+                if type(vu32.SetTheme) == "function" then
+                    pcall(function() vu32:SetTheme("TanPhatGlass") end)
+                end
+
                 v466 = vu32:MakeWindow({
-                    Title = "TanPhat hub : Blox Fruits",
-                    SubTitle = "by real_TanPhat",
-                    SaveFolder = "TanPhat | TanPhat lib v5.lua",
+                    Title = "TanPhat Hub | Blox Fruits",
+                    SubTitle = "Glass Liquid Edition • by TanPhat",
+                    SaveFolder = "TanPhat Hub | Glass Liquid.lua",
                 })
             elseif false then
             end
@@ -20894,3 +20922,74 @@ while thing == thing2 and counter < 1 do
     end
     break
 end
+
+
+-- TanPhat Hub: Glass Liquid finish (visual-only; existing tabs and callbacks stay intact).
+task.spawn(function()
+    local ok, err = pcall(function()
+        local CoreGui = game:GetService("CoreGui")
+        local Players = game:GetService("Players")
+        local playerGui = Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
+        local hubFrame
+
+        -- The UI library may use different ScreenGui names between versions.
+        for _, container in ipairs({CoreGui, playerGui}) do
+            if container then
+                for _, obj in ipairs(container:GetDescendants()) do
+                    if obj.Name == "Hub" and obj:IsA("ImageButton") then
+                        hubFrame = obj
+                        break
+                    end
+                end
+            end
+            if hubFrame then break end
+        end
+
+        if not hubFrame then
+            warn("[TanPhat Hub] Glass styling skipped: Hub frame was not found.")
+            return
+        end
+
+        hubFrame.BackgroundTransparency = 0.20
+        hubFrame.BackgroundColor3 = Color3.fromRGB(18, 48, 72)
+
+        local gradient = hubFrame:FindFirstChildOfClass("UIGradient")
+        if gradient then
+            gradient.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 34, 58)),
+                ColorSequenceKeypoint.new(0.48, Color3.fromRGB(42, 92, 125)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(17, 48, 78))
+            })
+            gradient.Rotation = 35
+        end
+
+        local corner = hubFrame:FindFirstChildOfClass("UICorner")
+        if corner then corner.CornerRadius = UDim.new(0, 16) end
+
+        if not hubFrame:FindFirstChild("TanPhatGlassStroke") then
+            local stroke = Instance.new("UIStroke")
+            stroke.Name = "TanPhatGlassStroke"
+            stroke.Color = Color3.fromRGB(150, 225, 255)
+            stroke.Thickness = 1.25
+            stroke.Transparency = 0.22
+            stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            stroke.Parent = hubFrame
+        end
+
+        for _, obj in ipairs(hubFrame:GetDescendants()) do
+            if obj:IsA("TextButton") then
+                obj.BackgroundTransparency = math.max(obj.BackgroundTransparency, 0.18)
+                obj.BackgroundColor3 = Color3.fromRGB(42, 86, 115)
+                if not obj:FindFirstChild("TanPhatGlassCorner") then
+                    local c = Instance.new("UICorner")
+                    c.Name = "TanPhatGlassCorner"
+                    c.CornerRadius = UDim.new(0, 7)
+                    c.Parent = obj
+                end
+            end
+        end
+    end)
+    if not ok then
+        warn("[TanPhat Hub] Glass styling error: " .. tostring(err))
+    end
+end)
