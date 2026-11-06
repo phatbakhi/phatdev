@@ -6937,6 +6937,7 @@ while thing == thing2 and counter < 1 do
             if 46 - 46 == 0 then
                 v422 = {}
             end
+            TweenSpeed = TweenSpeed or 136
             function TP13(v423)
                 local alhITGxKZf = game.Players.LocalPlayer.Character.HumanoidRootPart
                 local SELEHDvnUTp = (v423.Position - alhITGxKZf.Position).Magnitude
@@ -6956,7 +6957,7 @@ while thing == thing2 and counter < 1 do
             end
             function fastpos(v427)
                 hQkGEaJAF = (v427.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                Speed = 1000
+                Speed = 136
                 game:GetService("TweenService")
                     :Create(
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
@@ -6967,7 +6968,7 @@ while thing == thing2 and counter < 1 do
             end
             function slowpos(v428)
                 hQkGEaJAF = (v428.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                Speed = 150
+                Speed = 136
                 game:GetService("TweenService")
                     :Create(
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
@@ -7259,9 +7260,9 @@ while thing == thing2 and counter < 1 do
                         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(35, 75, 105)),
                         ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 42, 72))
                     }),
-                    ["Color Hub 2"] = Color3.fromRGB(24, 52, 76),
-                    ["Color Stroke"] = Color3.fromRGB(105, 190, 225),
-                    ["Color Theme"] = Color3.fromRGB(90, 210, 255),
+                    ["Color Hub 2"] = Color3.fromRGB(28, 66, 96),
+                    ["Color Stroke"] = Color3.fromRGB(125, 205, 245),
+                    ["Color Theme"] = Color3.fromRGB(35, 145, 255),
                     ["Color Text"] = Color3.fromRGB(245, 250, 255),
                     ["Color Dark Text"] = Color3.fromRGB(185, 215, 230)
                 }
@@ -7286,6 +7287,7 @@ while thing == thing2 and counter < 1 do
             if 47 - 47 == 0 then
                 v484 = v466:MakeTab({ "Discord", "info" })
                 v485 = v466:MakeTab({ "Farm", "home" })
+                v500 = v466:MakeTab({ "Halloween Event", "ghost" })
             end
             if 30 % 30 == 0 then
                 v487 = v466:MakeTab({ "Quest | Items", "swords" })
@@ -7313,6 +7315,30 @@ while thing == thing2 and counter < 1 do
                 v495 = v466:MakeTab({ "Shop", "shoppingCart" })
                 v496 = v466:MakeTab({ "Misc", "settings" })
             end
+            -- Halloween Event UI. The live event remotes/entity paths are not present
+            -- in this source, so these are intentionally marked as beta placeholders.
+            if v500 then
+                v500:AddSection({ "Halloween Event • Beta" })
+                for _, featureName in ipairs({
+                    "Trick or treat (beta)",
+                    "Farm pumpkins",
+                    "Farm Halloween bosses (Jack-o'-Lantern)",
+                    "Summon Great Pumpkin (beta)",
+                    "Spooky gacha (beta)"
+                }) do
+                    v500:AddToggle({
+                        Name = featureName,
+                        Description = "UI beta — cần event remote/API chính xác để kích hoạt",
+                        Default = false,
+                        Callback = function(enabled)
+                            if enabled then
+                                warn("[Halloween Event] Chưa bật tự động: thiếu event remote/API trong source.")
+                            end
+                        end
+                    })
+                end
+            end
+
             local function LsPvWGWyo(fEyIvARMhnW)
                 local PfqakeBl = fEyIvARMhnW.Tab.Cont
                 if not PfqakeBl then
@@ -7595,7 +7621,7 @@ while thing == thing2 and counter < 1 do
                 elseif 34 + 36 ~= 70 then
                 end
                 local ZZIcpMzWGHs = (alhITGxKZf.Position - fqwgVfsW.Position).Magnitude
-                local CrNwydJnrMBZ = 200
+                local CrNwydJnrMBZ = 136
                 local vPTYobcB = math.max(ZZIcpMzWGHs / CrNwydJnrMBZ, 0.1)
                 if 82 * 0 + 82 == 82 then
                     CurrentTween = TweenService:Create(
@@ -7787,7 +7813,8 @@ while thing == thing2 and counter < 1 do
                                         end
                                     else
                                         local pbOtOTOIL = FYEEFwmW.Container.QuestTitle.Title.Text
-                                        if not string.find(pbOtOTOIL, NameMonNew) then
+                                        if os.time() - (_G.LastQuestTime or 0) > 4
+                                            and not string.find(pbOtOTOIL, NameMonNew, 1, true) then
                                             StartBring = false
                                             ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
                                             task.wait(1.5)
@@ -7892,10 +7919,11 @@ while thing == thing2 and counter < 1 do
                                         end
                                     end
                                 else
+                                    CheckQuest()
                                     local ggRfxaqa =
                                         game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
-                                    CheckQuest()
-                                    if not string.find(ggRfxaqa, NameMon) then
+                                    if os.time() - (_G.LastQuestTime or 0) > 4
+                                        and not string.find(ggRfxaqa, NameMon, 1, true) then
                                         StartBring = false
                                         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                                         task.wait(1.5)
@@ -7916,7 +7944,8 @@ while thing == thing2 and counter < 1 do
                                                             and v512.Name == Mon
                                                             and not (_G.GlitchedMobs and _G.GlitchedMobs[v512])
                                                         then
-                                                            if not string.find(ggRfxaqa, NameMon) then
+                                                            if os.time() - (_G.LastQuestTime or 0) > 4
+                                                                and not string.find(ggRfxaqa, NameMon, 1, true) then
                                                                 StartBring = false
                                                                 game:GetService("ReplicatedStorage").Remotes.CommF_
                                                                     :InvokeServer("AbandonQuest")
@@ -20950,15 +20979,15 @@ task.spawn(function()
             return
         end
 
-        hubFrame.BackgroundTransparency = 0.20
-        hubFrame.BackgroundColor3 = Color3.fromRGB(18, 48, 72)
+        hubFrame.BackgroundTransparency = 0.28
+        hubFrame.BackgroundColor3 = Color3.fromRGB(18, 55, 88)
 
         local gradient = hubFrame:FindFirstChildOfClass("UIGradient")
         if gradient then
             gradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 34, 58)),
-                ColorSequenceKeypoint.new(0.48, Color3.fromRGB(42, 92, 125)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(17, 48, 78))
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 40, 70)),
+                ColorSequenceKeypoint.new(0.48, Color3.fromRGB(42, 105, 155)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(18, 58, 100))
             })
             gradient.Rotation = 35
         end
@@ -20978,8 +21007,8 @@ task.spawn(function()
 
         for _, obj in ipairs(hubFrame:GetDescendants()) do
             if obj:IsA("TextButton") then
-                obj.BackgroundTransparency = math.max(obj.BackgroundTransparency, 0.18)
-                obj.BackgroundColor3 = Color3.fromRGB(42, 86, 115)
+                obj.BackgroundTransparency = math.max(obj.BackgroundTransparency, 0.22)
+                obj.BackgroundColor3 = Color3.fromRGB(35, 105, 175)
                 if not obj:FindFirstChild("TanPhatGlassCorner") then
                     local c = Instance.new("UICorner")
                     c.Name = "TanPhatGlassCorner"
