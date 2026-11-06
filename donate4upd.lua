@@ -6937,7 +6937,6 @@ while thing == thing2 and counter < 1 do
             if 46 - 46 == 0 then
                 v422 = {}
             end
-            TweenSpeed = TweenSpeed or 136
             function TP13(v423)
                 local alhITGxKZf = game.Players.LocalPlayer.Character.HumanoidRootPart
                 local SELEHDvnUTp = (v423.Position - alhITGxKZf.Position).Magnitude
@@ -6957,7 +6956,7 @@ while thing == thing2 and counter < 1 do
             end
             function fastpos(v427)
                 hQkGEaJAF = (v427.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                Speed = 136
+                Speed = 1000
                 game:GetService("TweenService")
                     :Create(
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
@@ -6968,7 +6967,7 @@ while thing == thing2 and counter < 1 do
             end
             function slowpos(v428)
                 hQkGEaJAF = (v428.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                Speed = 136
+                Speed = 150
                 game:GetService("TweenService")
                     :Create(
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
@@ -7260,9 +7259,9 @@ while thing == thing2 and counter < 1 do
                         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(35, 75, 105)),
                         ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 42, 72))
                     }),
-                    ["Color Hub 2"] = Color3.fromRGB(28, 66, 96),
-                    ["Color Stroke"] = Color3.fromRGB(125, 205, 245),
-                    ["Color Theme"] = Color3.fromRGB(35, 145, 255),
+                    ["Color Hub 2"] = Color3.fromRGB(24, 52, 76),
+                    ["Color Stroke"] = Color3.fromRGB(105, 190, 225),
+                    ["Color Theme"] = Color3.fromRGB(90, 210, 255),
                     ["Color Text"] = Color3.fromRGB(245, 250, 255),
                     ["Color Dark Text"] = Color3.fromRGB(185, 215, 230)
                 }
@@ -7287,7 +7286,6 @@ while thing == thing2 and counter < 1 do
             if 47 - 47 == 0 then
                 v484 = v466:MakeTab({ "Discord", "info" })
                 v485 = v466:MakeTab({ "Farm", "home" })
-                v500 = v466:MakeTab({ "Halloween Event", "ghost" })
             end
             if 30 % 30 == 0 then
                 v487 = v466:MakeTab({ "Quest | Items", "swords" })
@@ -7315,30 +7313,6 @@ while thing == thing2 and counter < 1 do
                 v495 = v466:MakeTab({ "Shop", "shoppingCart" })
                 v496 = v466:MakeTab({ "Misc", "settings" })
             end
-            -- Halloween Event UI. The live event remotes/entity paths are not present
-            -- in this source, so these are intentionally marked as beta placeholders.
-            if v500 then
-                v500:AddSection({ "Halloween Event • Beta" })
-                for _, featureName in ipairs({
-                    "Trick or treat (beta)",
-                    "Farm pumpkins",
-                    "Farm Halloween bosses (Jack-o'-Lantern)",
-                    "Summon Great Pumpkin (beta)",
-                    "Spooky gacha (beta)"
-                }) do
-                    v500:AddToggle({
-                        Name = featureName,
-                        Description = "UI beta — cần event remote/API chính xác để kích hoạt",
-                        Default = false,
-                        Callback = function(enabled)
-                            if enabled then
-                                warn("[Halloween Event] Chưa bật tự động: thiếu event remote/API trong source.")
-                            end
-                        end
-                    })
-                end
-            end
-
             local function LsPvWGWyo(fEyIvARMhnW)
                 local PfqakeBl = fEyIvARMhnW.Tab.Cont
                 if not PfqakeBl then
@@ -7581,7 +7555,7 @@ while thing == thing2 and counter < 1 do
                 if _G.PlayerRespawning then
                     return
                 end
-                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarm or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     return
                 end
                 local alhITGxKZf = kllSyMbSZMS()
@@ -7621,7 +7595,7 @@ while thing == thing2 and counter < 1 do
                 elseif 34 + 36 ~= 70 then
                 end
                 local ZZIcpMzWGHs = (alhITGxKZf.Position - fqwgVfsW.Position).Magnitude
-                local CrNwydJnrMBZ = 136
+                local CrNwydJnrMBZ = 200
                 local vPTYobcB = math.max(ZZIcpMzWGHs / CrNwydJnrMBZ, 0.1)
                 if 82 * 0 + 82 == 82 then
                     CurrentTween = TweenService:Create(
@@ -7642,7 +7616,7 @@ while thing == thing2 and counter < 1 do
                     end)
                 end
                 while
-                    (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level"))
+                    (_G.AutoFarm or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level"))
                     and CurrentTween
                     and CurrentTween.PlaybackState == Enum.PlaybackState.Playing
                 do
@@ -7698,7 +7672,7 @@ while thing == thing2 and counter < 1 do
                 end)
             end
             local function mvpEMSLX()
-                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     return
                 end
                 if TravelingSubmerged or tdMtwvzKDAe() or KYMiPIfDgbV.Data.Level.Value < 2600 then
@@ -7706,19 +7680,19 @@ while thing == thing2 and counter < 1 do
                 end
                 TravelingSubmerged = true
                 eQNrhjiE(SUB_NPC + Vector3.new(0, 60, 0))
-                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     TravelingSubmerged = false
                     return
                 end
                 eQNrhjiE(SUB_NPC)
-                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     TravelingSubmerged = false
                     return
                 end
                 pcall(function()
                     ReplicatedStorage.Modules.Net["RF/SubmarineWorkerSpeak"]:InvokeServer("TravelToSubmergedIsland")
                 end)
-                while (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) and not tdMtwvzKDAe() do
+                while (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) and not tdMtwvzKDAe() do
                     task.wait(0.5)
                 end
                 if not (58 ~= 58) then
@@ -7773,12 +7747,22 @@ while thing == thing2 and counter < 1 do
             end
             if 77 % 77 == 0 then
                 v485:AddToggle({
-                    Name = "Auto Farm Level",
-                    Description = "Farm Level",
+                    Name = "Accept Quest",
+                    Description = "Accept the quest for your current level and island only",
                     Default = false,
-                    Callback = function(MvRuMpzvxo)
-                        _G.AutoFarm = MvRuMpzvxo
-                        pVltikClK(_G.AutoFarm)
+                    Callback = function(value)
+                        _G.AutoFarmQuest = value
+                        pVltikClK(value)
+                    end,
+                })
+                v485:AddToggle({
+                    Name = "Farm Level",
+                    Description = "Farm mobs for your current level; does not accept or abandon quests",
+                    Default = false,
+                    Callback = function(value)
+                        _G.AutoFarmLevel = value
+                        _G.AutoFarm = value -- keep compatibility with existing farm integrations
+                        pVltikClK(value)
                     end,
                 })
             elseif not (58 == 58) then
@@ -7786,7 +7770,7 @@ while thing == thing2 and counter < 1 do
             if 11 * 0 + 11 == 11 then
                 spawn(function()
                     while task.wait() do
-                        if _G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level") then
+                        if _G.AutoFarmLevel or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level") then
                             pcall(function()
                                 local kasGwmMl = KYMiPIfDgbV.Data.Level.Value
                                 if kasGwmMl >= 2600 and World3 then
@@ -7804,20 +7788,15 @@ while thing == thing2 and counter < 1 do
                                         else
                                             if os.time() - (_G.LastQuestTime or 0) >= 1 then
                                                 _G.LastQuestTime = os.time()
-                                                ReplicatedStorage.Remotes.CommF_:InvokeServer(
-                                                    "StartQuest",
-                                                    NameQuestNew,
-                                                    LevelQuestNew
-                                                )
+                                                -- Accept Quest toggle handles StartQuest separately.
                                             end
                                         end
                                     else
                                         local pbOtOTOIL = FYEEFwmW.Container.QuestTitle.Title.Text
-                                        if os.time() - (_G.LastQuestTime or 0) > 4
-                                            and not string.find(pbOtOTOIL, NameMonNew, 1, true) then
+                                        if not string.find(pbOtOTOIL, NameMonNew) then
                                             StartBring = false
-                                            ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
-                                            task.wait(1.5)
+                                            -- Farm Level never abandons quests.
+                                            task.wait(0.25)
                                         else
                                             for soEUdQkaBM, IaEKnTvT in
                                                 pairs(game:GetService("Workspace").Enemies:GetChildren())
@@ -7919,14 +7898,13 @@ while thing == thing2 and counter < 1 do
                                         end
                                     end
                                 else
-                                    CheckQuest()
                                     local ggRfxaqa =
                                         game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
-                                    if os.time() - (_G.LastQuestTime or 0) > 4
-                                        and not string.find(ggRfxaqa, NameMon, 1, true) then
+                                    CheckQuest()
+                                    if not string.find(ggRfxaqa, NameMon) then
                                         StartBring = false
-                                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                                        task.wait(1.5)
+                                        -- Farm Level never abandons quests.
+                                        task.wait(0.25)
                                     end
                                     if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible ~= false then
                                         if
@@ -7944,12 +7922,10 @@ while thing == thing2 and counter < 1 do
                                                             and v512.Name == Mon
                                                             and not (_G.GlitchedMobs and _G.GlitchedMobs[v512])
                                                         then
-                                                            if os.time() - (_G.LastQuestTime or 0) > 4
-                                                                and not string.find(ggRfxaqa, NameMon, 1, true) then
+                                                            if not string.find(ggRfxaqa, NameMon) then
                                                                 StartBring = false
-                                                                game:GetService("ReplicatedStorage").Remotes.CommF_
-                                                                    :InvokeServer("AbandonQuest")
-                                                                task.wait(1.5)
+                                                                -- Farm Level never abandons quests.
+                                                                task.wait(0.25)
                                                             else
                                                                 local tDWoVjMLDRq = os.time()
                                                                 local DwEbsapCZscN = v512.Humanoid.Health
@@ -8140,9 +8116,8 @@ while thing == thing2 and counter < 1 do
                                                                 end)
                                                             else
                                                                 StartBring = false
-                                                                game:GetService("ReplicatedStorage").Remotes.CommF_
-                                                                    :InvokeServer("AbandonQuest")
-                                                                task.wait(1.5)
+                                                                -- Farm Level never abandons quests.
+                                                                task.wait(0.25)
                                                             end
                                                         end
                                                     else
@@ -8176,8 +8151,7 @@ while thing == thing2 and counter < 1 do
                                         then
                                             if os.time() - (_G.LastQuestTime or 0) >= 1 then
                                                 _G.LastQuestTime = os.time()
-                                                game:GetService("ReplicatedStorage").Remotes.CommF_
-                                                    :InvokeServer("StartQuest", NameQuest, LevelQuest)
+                                                -- Accept Quest toggle handles StartQuest separately.
                                             end
                                         end
                                     end
@@ -8333,7 +8307,56 @@ while thing == thing2 and counter < 1 do
                 end
             end
             if 49 - 49 == 0 then
-                v485:AddToggle({
+    
+            -- Separate quest-only worker: selects and accepts quests, never attacks mobs.
+            task.spawn(function()
+                while task.wait(0.5) do
+                    if _G.AutoFarmQuest then
+                        pcall(function()
+                            local level = KYMiPIfDgbV.Data.Level.Value
+                            local questGui = KYMiPIfDgbV.PlayerGui.Main.Quest
+                            local questName, questLevel, questCFrame, targetName
+
+                            if level >= 2600 and World3 and not tdMtwvzKDAe() then
+                                mvpEMSLX()
+                            end
+
+                            if level >= 2600 and World3 and tdMtwvzKDAe() then
+                                VYdVfOqpXLNj()
+                                questName, questLevel = NameQuestNew, LevelQuestNew
+                                questCFrame, targetName = CFrameQuestNew, NameMonNew
+                            else
+                                CheckQuest()
+                                questName, questLevel = NameQuest, LevelQuest
+                                questCFrame, targetName = CFrameQuest, NameMon
+                            end
+
+                            if questName and questLevel and questCFrame and targetName then
+                                if questGui.Visible then
+                                    local title = questGui.Container.QuestTitle.Title.Text
+                                    if not string.find(title, targetName, 1, true)
+                                        and os.clock() - (_G.LastWrongQuestAbandon or 0) >= 3 then
+                                        _G.LastWrongQuestAbandon = os.clock()
+                                        ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
+                                    end
+                                else
+                                    local root = kllSyMbSZMS()
+                                    if root then
+                                        if (root.Position - questCFrame.Position).Magnitude > 20 then
+                                            TP1(questCFrame)
+                                        elseif os.clock() - (_G.LastAcceptQuestCall or 0) >= 2 then
+                                            _G.LastAcceptQuestCall = os.clock()
+                                            ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", questName, questLevel)
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                    end
+                end
+            end)
+
+            v485:AddToggle({
                     Name = "Auto Farm Nearest",
                     Description = "Auto Farm Nearest Mobs",
                     Default = false,
@@ -20979,15 +21002,15 @@ task.spawn(function()
             return
         end
 
-        hubFrame.BackgroundTransparency = 0.28
-        hubFrame.BackgroundColor3 = Color3.fromRGB(18, 55, 88)
+        hubFrame.BackgroundTransparency = 0.20
+        hubFrame.BackgroundColor3 = Color3.fromRGB(18, 48, 72)
 
         local gradient = hubFrame:FindFirstChildOfClass("UIGradient")
         if gradient then
             gradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 40, 70)),
-                ColorSequenceKeypoint.new(0.48, Color3.fromRGB(42, 105, 155)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(18, 58, 100))
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 34, 58)),
+                ColorSequenceKeypoint.new(0.48, Color3.fromRGB(42, 92, 125)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(17, 48, 78))
             })
             gradient.Rotation = 35
         end
@@ -21007,8 +21030,8 @@ task.spawn(function()
 
         for _, obj in ipairs(hubFrame:GetDescendants()) do
             if obj:IsA("TextButton") then
-                obj.BackgroundTransparency = math.max(obj.BackgroundTransparency, 0.22)
-                obj.BackgroundColor3 = Color3.fromRGB(35, 105, 175)
+                obj.BackgroundTransparency = math.max(obj.BackgroundTransparency, 0.18)
+                obj.BackgroundColor3 = Color3.fromRGB(42, 86, 115)
                 if not obj:FindFirstChild("TanPhatGlassCorner") then
                     local c = Instance.new("UICorner")
                     c.Name = "TanPhatGlassCorner"
