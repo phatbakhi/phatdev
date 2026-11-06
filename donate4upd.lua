@@ -19746,6 +19746,11 @@ while thing == thing2 and counter < 1 do
             end)
         elseif 16 % 16 ~= 0 then
         end
+        -- Keep the runtime state in sync with the toggle's displayed default.
+        -- Some UI libraries do not invoke a toggle callback during initialization.
+        if _G.AutoAttack == nil then
+            _G.AutoAttack = true
+        end
         if true then
             v496:AddToggle({
                 Name = "Fast Attack",
@@ -19844,11 +19849,11 @@ while thing == thing2 and counter < 1 do
                     if dUuIFIwu > 0 and _G.AutoAttack then
                         _G.FastAttackMultiplier = dUuIFIwu
                         local pyBDSkDLUptn = game.Players.LocalPlayer.Character
-                        local sPhJHtENl
-                        if pyBDSkDLUptn then
-                            sPhJHtENl = pyBDSkDLUptn:FindFirstChild("HumanoidRootPart")
-                        else
-                            sPhJHtENl = pyBDSkDLUptn
+                        local sPhJHtENl = pyBDSkDLUptn
+                            and pyBDSkDLUptn:FindFirstChild("HumanoidRootPart")
+                        if not sPhJHtENl then
+                            task.wait(0.05)
+                            continue
                         end
                         local cKvOCAcSR, eETQuLVJ, RmEOjtdhW = ipairs({ workspace.Enemies, workspace.Characters })
                         local dpPwXvsnf = {}
