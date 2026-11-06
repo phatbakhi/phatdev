@@ -19882,7 +19882,7 @@ while thing == thing2 and counter < 1 do
                                             and (
                                                 cJJcnmYzsyim.Health > 0
                                                 and (yADHUQCYZboX.Position - sPhJHtENl.Position).Magnitude
-                                                    <= (_G.AttackRange or 60)
+                                                    <= ((_G.AttackRange and _G.AttackRange > 0) and _G.AttackRange or 60)
                                             )
                                         )
                                     )
@@ -19897,7 +19897,7 @@ while thing == thing2 and counter < 1 do
                                         if
                                             qCQzaheNCw:IsA("BasePart")
                                             and (yADHUQCYZboX.Position - sPhJHtENl.Position).Magnitude
-                                                <= (_G.AttackRange or 60)
+                                                <= ((_G.AttackRange and _G.AttackRange > 0) and _G.AttackRange or 60)
                                         then
                                             dpPwXvsnf[#dpPwXvsnf + 1] = { ojOlVgjSD, qCQzaheNCw }
                                         end
@@ -19908,24 +19908,25 @@ while thing == thing2 and counter < 1 do
                         local OJtbWNYtEf = pyBDSkDLUptn:FindFirstChildOfClass("Tool")
                         local MapdgyHbdb = false
                         local CLuHImERjG = false
-                        if OJtbWNYtEf then
-                            local NGzWLZOmq = OJtbWNYtEf.ToolTip
-                            local PEmzBdykw = OJtbWNYtEf:GetAttribute("WeaponType")
-                            if
-                                _G.AutoAttack
-                                and (
-                                    NGzWLZOmq == "Melee"
-                                    or NGzWLZOmq == "Sword"
-                                    or PEmzBdykw == "Melee"
-                                    or PEmzBdykw == "Sword"
-                                )
-                            then
+                        if OJtbWNYtEf and OJtbWNYtEf:IsA("Tool") then
+                            -- Normalize weapon metadata; some fighting styles expose
+                            -- "Combat" or differently-cased tooltip values.
+                            local NGzWLZOmq = string.lower(tostring(OJtbWNYtEf.ToolTip or ""))
+                            local PEmzBdykw = string.lower(tostring(OJtbWNYtEf:GetAttribute("WeaponType") or ""))
+                            local toolName = string.lower(OJtbWNYtEf.Name)
+                            if _G.AutoAttack and (
+                                NGzWLZOmq == "melee"
+                                or NGzWLZOmq == "sword"
+                                or PEmzBdykw == "melee"
+                                or PEmzBdykw == "sword"
+                                or toolName == "combat"
+                                or toolName:find("fighting style", 1, true) ~= nil
+                            ) then
                                 MapdgyHbdb = true
-                            elseif
-                                _G.FastFruitM1
-                                and _G.AutoAttack
-                                and (NGzWLZOmq == "Blox Fruit" or OJtbWNYtEf:FindFirstChild("LeftClickRemote"))
-                            then
+                            elseif _G.FastFruitM1 and _G.AutoAttack and (
+                                NGzWLZOmq == "blox fruit"
+                                or OJtbWNYtEf:FindFirstChild("LeftClickRemote")
+                            ) then
                                 CLuHImERjG = true
                             end
                         end
