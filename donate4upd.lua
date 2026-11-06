@@ -7312,6 +7312,7 @@ while thing == thing2 and counter < 1 do
             if not (27 ~= 27) then
                 v495 = v466:MakeTab({ "Shop", "shoppingCart" })
                 v496 = v466:MakeTab({ "Misc", "settings" })
+                v500 = v466:MakeTab({ "Hop", "server" })
             end
             local function LsPvWGWyo(fEyIvARMhnW)
                 local PfqakeBl = fEyIvARMhnW.Tab.Cont
@@ -7555,7 +7556,7 @@ while thing == thing2 and counter < 1 do
                 if _G.PlayerRespawning then
                     return
                 end
-                if not (_G.AutoFarm or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     return
                 end
                 local alhITGxKZf = kllSyMbSZMS()
@@ -7616,7 +7617,7 @@ while thing == thing2 and counter < 1 do
                     end)
                 end
                 while
-                    (_G.AutoFarm or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level"))
+                    (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level"))
                     and CurrentTween
                     and CurrentTween.PlaybackState == Enum.PlaybackState.Playing
                 do
@@ -7672,7 +7673,7 @@ while thing == thing2 and counter < 1 do
                 end)
             end
             local function mvpEMSLX()
-                if not (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     return
                 end
                 if TravelingSubmerged or tdMtwvzKDAe() or KYMiPIfDgbV.Data.Level.Value < 2600 then
@@ -7680,25 +7681,209 @@ while thing == thing2 and counter < 1 do
                 end
                 TravelingSubmerged = true
                 eQNrhjiE(SUB_NPC + Vector3.new(0, 60, 0))
-                if not (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     TravelingSubmerged = false
                     return
                 end
                 eQNrhjiE(SUB_NPC)
-                if not (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
+                if not (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) then
                     TravelingSubmerged = false
                     return
                 end
                 pcall(function()
                     ReplicatedStorage.Modules.Net["RF/SubmarineWorkerSpeak"]:InvokeServer("TravelToSubmergedIsland")
                 end)
-                while (_G.AutoFarmLevel or _G.AutoFarmQuest or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) and not tdMtwvzKDAe() do
+                while (_G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level")) and not tdMtwvzKDAe() do
                     task.wait(0.5)
                 end
                 if not (58 ~= 58) then
                     TravelingSubmerged = false
                 end
             end
+
+            -- Hop tab ported from testscr.lua, adapted to this hub's controls/helpers.
+            do
+                local hopOptions = {
+                    { key = "HubHop_RipIndra", title = "Auto Attack / Hop Rip Indra", mob = "rip_indra" },
+                    { key = "HubHop_Darkbeard", title = "Auto Attack / Hop Darkbeard", mob = "Darkbeard" },
+                    { key = "HubHop_DoughKing", title = "Auto Attack / Hop Dough King", mob = "Dough King" },
+                    { key = "HubHop_SoulReaper", title = "Auto Attack / Hop Soul Reaper", mob = "Soul Reaper" },
+                    { key = "HubHop_Tyrant", title = "Auto Attack / Hop Tyrant of the Skies", mob = "Tyrant of the Skies" },
+                }
+
+                v500:AddSection({ "Boss Hop" })
+                for _, option in ipairs(hopOptions) do
+                    v500:AddToggle({
+                        Name = option.title,
+                        Description = "Attack the boss if present; otherwise search another public server.",
+                        Default = false,
+                        Callback = function(value)
+                            _G[option.key] = value
+                        end,
+                    })
+                end
+
+                v500:AddToggle({
+                    Name = "Auto Attack / Hop Elites",
+                    Description = "Only attacks an Elite target while an Elite quest is active.",
+                    Default = false,
+                    Callback = function(value)
+                        _G.HubHop_Elite = value
+                    end,
+                })
+
+                v500:AddSection({ "World Hop" })
+                v500:AddToggle({
+                    Name = "Auto Collect Fruit / Hop Server",
+                    Description = "Collect a fruit in the current server; hop when none is found.",
+                    Default = false,
+                    Callback = function(value)
+                        _G.HubHop_Fruit = value
+                    end,
+                })
+
+                v500:AddToggle({
+                    Name = "Auto Observation Farm / Hop [BETA]",
+                    Description = "Farm the world-specific Observation target; hop when unavailable.",
+                    Default = false,
+                    Callback = function(value)
+                        _G.HubHop_Observation = value
+                    end,
+                })
+
+                local function getHopEnemy(name)
+                    local folder = workspace:FindFirstChild("Enemies")
+                    if not folder then return nil end
+                    for _, enemy in ipairs(folder:GetChildren()) do
+                        local hum = enemy:FindFirstChildOfClass("Humanoid")
+                        local root = enemy:FindFirstChild("HumanoidRootPart")
+                        if enemy.Name == name and hum and root and hum.Health > 0 then
+                            return enemy
+                        end
+                    end
+                    return nil
+                end
+
+                task.spawn(function()
+                    while task.wait(0.35) do
+                        for _, option in ipairs(hopOptions) do
+                            if _G[option.key] then
+                                pcall(function()
+                                    local enemy = getHopEnemy(option.mob)
+                                    if enemy then
+                                        if Attack and Attack.Kill then
+                                            repeat
+                                                task.wait()
+                                                if not _G[option.key] then break end
+                                                Attack.Kill(enemy, _G[option.key])
+                                            until not _G[option.key]
+                                                or not enemy.Parent
+                                                or not enemy:FindFirstChildOfClass("Humanoid")
+                                                or enemy:FindFirstChildOfClass("Humanoid").Health <= 0
+                                        else
+                                            warn("[Hop] Attack.Kill is unavailable in this hub.")
+                                            task.wait(1)
+                                        end
+                                    elseif type(Hop) == "function" then
+                                        Hop()
+                                        task.wait(5)
+                                    end
+                                end)
+                            end
+                        end
+
+                        if _G.HubHop_Elite then
+                            pcall(function()
+                                local player = game:GetService("Players").LocalPlayer
+                                local quest = player:FindFirstChild("PlayerGui")
+                                    and player.PlayerGui:FindFirstChild("Main")
+                                    and player.PlayerGui.Main:FindFirstChild("Quest")
+                                local title = ""
+                                if quest and quest.Visible then
+                                    local container = quest:FindFirstChild("Container")
+                                    local questTitle = container and container:FindFirstChild("QuestTitle")
+                                    local label = questTitle and questTitle:FindFirstChild("Title")
+                                    title = label and label.Text or ""
+                                end
+                                local eliteNames = { "Diablo", "Urban", "Deandre" }
+                                local matched = false
+                                for _, eliteName in ipairs(eliteNames) do
+                                    if string.find(title, eliteName, 1, true) then
+                                        matched = true
+                                        break
+                                    end
+                                end
+                                if matched then
+                                    for _, eliteName in ipairs(eliteNames) do
+                                        local enemy = getHopEnemy(eliteName)
+                                        if enemy and Attack and Attack.Kill then
+                                            repeat
+                                                task.wait()
+                                                if not _G.HubHop_Elite then break end
+                                                Attack.Kill(enemy, _G.HubHop_Elite)
+                                            until not _G.HubHop_Elite or not enemy.Parent
+                                                or not enemy:FindFirstChildOfClass("Humanoid")
+                                                or enemy:FindFirstChildOfClass("Humanoid").Health <= 0
+                                        end
+                                    end
+                                elseif type(Hop) == "function" then
+                                    Hop()
+                                    task.wait(5)
+                                end
+                            end)
+                        end
+
+                        if _G.HubHop_Fruit then
+                            pcall(function()
+                                local found = false
+                                for _, item in ipairs(workspace:GetChildren()) do
+                                    if _G.HubHop_Fruit and string.find(item.Name, "Fruit", 1, true) then
+                                        local handle = item:FindFirstChild("Handle")
+                                        if handle and handle:IsA("BasePart") then
+                                            found = true
+                                            if type(eQNrhjiE) == "function" then
+                                                eQNrhjiE(handle.CFrame)
+                                            end
+                                            break
+                                        end
+                                    end
+                                end
+                                if not found and _G.HubHop_Fruit and type(Hop) == "function" then
+                                    Hop()
+                                    task.wait(5)
+                                end
+                            end)
+                        end
+
+                        if _G.HubHop_Observation then
+                            pcall(function()
+                                local worldTarget
+                                if World1 then
+                                    worldTarget = "Galley Captain"
+                                elseif World2 then
+                                    worldTarget = "Lava Pirate"
+                                elseif World3 then
+                                    worldTarget = "Venomous Assailant"
+                                end
+                                local enemy = worldTarget and getHopEnemy(worldTarget)
+                                if enemy and Attack and Attack.Kill then
+                                    repeat
+                                        task.wait()
+                                        if not _G.HubHop_Observation then break end
+                                        Attack.Kill(enemy, _G.HubHop_Observation)
+                                    until not _G.HubHop_Observation or not enemy.Parent
+                                        or not enemy:FindFirstChildOfClass("Humanoid")
+                                        or enemy:FindFirstChildOfClass("Humanoid").Health <= 0
+                                elseif _G.HubHop_Observation and type(Hop) == "function" then
+                                    Hop()
+                                    task.wait(5)
+                                end
+                            end)
+                        end
+                    end
+                end)
+            end
+
             local function VYdVfOqpXLNj()
                 local EgKxnngmU = KYMiPIfDgbV.Data.Level.Value
                 if EgKxnngmU >= 2600 and EgKxnngmU <= 2624 then
@@ -7747,22 +7932,12 @@ while thing == thing2 and counter < 1 do
             end
             if 77 % 77 == 0 then
                 v485:AddToggle({
-                    Name = "Accept Quest",
-                    Description = "Accept the quest for your current level and island only",
+                    Name = "Auto Farm Level",
+                    Description = "Farm Level",
                     Default = false,
-                    Callback = function(value)
-                        _G.AutoFarmQuest = value
-                        pVltikClK(value)
-                    end,
-                })
-                v485:AddToggle({
-                    Name = "Farm Level",
-                    Description = "Farm mobs for your current level; does not accept or abandon quests",
-                    Default = false,
-                    Callback = function(value)
-                        _G.AutoFarmLevel = value
-                        _G.AutoFarm = value -- keep compatibility with existing farm integrations
-                        pVltikClK(value)
+                    Callback = function(MvRuMpzvxo)
+                        _G.AutoFarm = MvRuMpzvxo
+                        pVltikClK(_G.AutoFarm)
                     end,
                 })
             elseif not (58 == 58) then
@@ -7770,7 +7945,7 @@ while thing == thing2 and counter < 1 do
             if 11 * 0 + 11 == 11 then
                 spawn(function()
                     while task.wait() do
-                        if _G.AutoFarmLevel or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level") then
+                        if _G.AutoFarm or (_G.AutoFarmMastery and _G.MasteryFarmType == "Level") then
                             pcall(function()
                                 local kasGwmMl = KYMiPIfDgbV.Data.Level.Value
                                 if kasGwmMl >= 2600 and World3 then
@@ -7788,15 +7963,22 @@ while thing == thing2 and counter < 1 do
                                         else
                                             if os.time() - (_G.LastQuestTime or 0) >= 1 then
                                                 _G.LastQuestTime = os.time()
-                                                -- Accept Quest toggle handles StartQuest separately.
+                                                ReplicatedStorage.Remotes.CommF_:InvokeServer(
+                                                    "StartQuest",
+                                                    NameQuestNew,
+                                                    LevelQuestNew
+                                                )
                                             end
                                         end
                                     else
                                         local pbOtOTOIL = FYEEFwmW.Container.QuestTitle.Title.Text
                                         if not string.find(pbOtOTOIL, NameMonNew) then
                                             StartBring = false
-                                            -- Farm Level never abandons quests.
-                                            task.wait(0.25)
+                                            if os.clock() - (_G.LastFarmAbandonAt or 0) >= 5 then
+                                                _G.LastFarmAbandonAt = os.clock()
+                                                ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
+                                            end
+                                            task.wait(1.5)
                                         else
                                             for soEUdQkaBM, IaEKnTvT in
                                                 pairs(game:GetService("Workspace").Enemies:GetChildren())
@@ -7898,18 +8080,24 @@ while thing == thing2 and counter < 1 do
                                         end
                                     end
                                 else
-                                    local ggRfxaqa =
-                                        game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
                                     CheckQuest()
-                                    if not string.find(ggRfxaqa, NameMon) then
+                                    local playerGui = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")
+                                    local mainGui = playerGui and playerGui:FindFirstChild("Main")
+                                    local questGui = mainGui and mainGui:FindFirstChild("Quest")
+                                    local questContainer = questGui and questGui:FindFirstChild("Container")
+                                    local questTitleFrame = questContainer and questContainer:FindFirstChild("QuestTitle")
+                                    local questTitleLabel = questTitleFrame and questTitleFrame:FindFirstChild("Title")
+                                    local ggRfxaqa = questTitleLabel and questTitleLabel.Text or ""
+                                    if questGui and questGui.Visible and ggRfxaqa ~= "" and not string.find(ggRfxaqa, NameMon, 1, true) then
                                         StartBring = false
-                                        -- Farm Level never abandons quests.
-                                        task.wait(0.25)
+                                        if os.clock() - (_G.LastFarmAbandonAt or 0) >= 5 then
+                                            _G.LastFarmAbandonAt = os.clock()
+                                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                                        end
+                                        task.wait(1.5)
                                     end
-                                    if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible ~= false then
-                                        if
-                                            game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true
-                                        then
+                                    if questGui and questGui.Visible then
+                                        if questGui.Visible == true then
                                             if not string.find(ggRfxaqa, "kissed") then
                                                 if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
                                                     for soEUdQkaBM, v512 in
@@ -7924,8 +8112,9 @@ while thing == thing2 and counter < 1 do
                                                         then
                                                             if not string.find(ggRfxaqa, NameMon) then
                                                                 StartBring = false
-                                                                -- Farm Level never abandons quests.
-                                                                task.wait(0.25)
+                                                                game:GetService("ReplicatedStorage").Remotes.CommF_
+                                                                    :InvokeServer("AbandonQuest")
+                                                                task.wait(1.5)
                                                             else
                                                                 local tDWoVjMLDRq = os.time()
                                                                 local DwEbsapCZscN = v512.Humanoid.Health
@@ -8116,8 +8305,9 @@ while thing == thing2 and counter < 1 do
                                                                 end)
                                                             else
                                                                 StartBring = false
-                                                                -- Farm Level never abandons quests.
-                                                                task.wait(0.25)
+                                                                game:GetService("ReplicatedStorage").Remotes.CommF_
+                                                                    :InvokeServer("AbandonQuest")
+                                                                task.wait(1.5)
                                                             end
                                                         end
                                                     else
@@ -8151,7 +8341,8 @@ while thing == thing2 and counter < 1 do
                                         then
                                             if os.time() - (_G.LastQuestTime or 0) >= 1 then
                                                 _G.LastQuestTime = os.time()
-                                                -- Accept Quest toggle handles StartQuest separately.
+                                                game:GetService("ReplicatedStorage").Remotes.CommF_
+                                                    :InvokeServer("StartQuest", NameQuest, LevelQuest)
                                             end
                                         end
                                     end
@@ -8307,56 +8498,7 @@ while thing == thing2 and counter < 1 do
                 end
             end
             if 49 - 49 == 0 then
-    
-            -- Separate quest-only worker: selects and accepts quests, never attacks mobs.
-            task.spawn(function()
-                while task.wait(0.5) do
-                    if _G.AutoFarmQuest then
-                        pcall(function()
-                            local level = KYMiPIfDgbV.Data.Level.Value
-                            local questGui = KYMiPIfDgbV.PlayerGui.Main.Quest
-                            local questName, questLevel, questCFrame, targetName
-
-                            if level >= 2600 and World3 and not tdMtwvzKDAe() then
-                                mvpEMSLX()
-                            end
-
-                            if level >= 2600 and World3 and tdMtwvzKDAe() then
-                                VYdVfOqpXLNj()
-                                questName, questLevel = NameQuestNew, LevelQuestNew
-                                questCFrame, targetName = CFrameQuestNew, NameMonNew
-                            else
-                                CheckQuest()
-                                questName, questLevel = NameQuest, LevelQuest
-                                questCFrame, targetName = CFrameQuest, NameMon
-                            end
-
-                            if questName and questLevel and questCFrame and targetName then
-                                if questGui.Visible then
-                                    local title = questGui.Container.QuestTitle.Title.Text
-                                    if not string.find(title, targetName, 1, true)
-                                        and os.clock() - (_G.LastWrongQuestAbandon or 0) >= 3 then
-                                        _G.LastWrongQuestAbandon = os.clock()
-                                        ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
-                                    end
-                                else
-                                    local root = kllSyMbSZMS()
-                                    if root then
-                                        if (root.Position - questCFrame.Position).Magnitude > 20 then
-                                            TP1(questCFrame)
-                                        elseif os.clock() - (_G.LastAcceptQuestCall or 0) >= 2 then
-                                            _G.LastAcceptQuestCall = os.clock()
-                                            ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", questName, questLevel)
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-                    end
-                end
-            end)
-
-            v485:AddToggle({
+                v485:AddToggle({
                     Name = "Auto Farm Nearest",
                     Description = "Auto Farm Nearest Mobs",
                     Default = false,
@@ -19746,11 +19888,6 @@ while thing == thing2 and counter < 1 do
             end)
         elseif 16 % 16 ~= 0 then
         end
-        -- Keep the runtime state in sync with the toggle's displayed default.
-        -- Some UI libraries do not invoke a toggle callback during initialization.
-        if _G.AutoAttack == nil then
-            _G.AutoAttack = true
-        end
         if true then
             v496:AddToggle({
                 Name = "Fast Attack",
@@ -19849,11 +19986,11 @@ while thing == thing2 and counter < 1 do
                     if dUuIFIwu > 0 and _G.AutoAttack then
                         _G.FastAttackMultiplier = dUuIFIwu
                         local pyBDSkDLUptn = game.Players.LocalPlayer.Character
-                        local sPhJHtENl = pyBDSkDLUptn
-                            and pyBDSkDLUptn:FindFirstChild("HumanoidRootPart")
-                        if not sPhJHtENl then
-                            task.wait(0.05)
-                            continue
+                        local sPhJHtENl
+                        if pyBDSkDLUptn then
+                            sPhJHtENl = pyBDSkDLUptn:FindFirstChild("HumanoidRootPart")
+                        else
+                            sPhJHtENl = pyBDSkDLUptn
                         end
                         local cKvOCAcSR, eETQuLVJ, RmEOjtdhW = ipairs({ workspace.Enemies, workspace.Characters })
                         local dpPwXvsnf = {}
@@ -19882,7 +20019,7 @@ while thing == thing2 and counter < 1 do
                                             and (
                                                 cJJcnmYzsyim.Health > 0
                                                 and (yADHUQCYZboX.Position - sPhJHtENl.Position).Magnitude
-                                                    <= ((_G.AttackRange and _G.AttackRange > 0) and _G.AttackRange or 60)
+                                                    <= (_G.AttackRange or 60)
                                             )
                                         )
                                     )
@@ -19897,7 +20034,7 @@ while thing == thing2 and counter < 1 do
                                         if
                                             qCQzaheNCw:IsA("BasePart")
                                             and (yADHUQCYZboX.Position - sPhJHtENl.Position).Magnitude
-                                                <= ((_G.AttackRange and _G.AttackRange > 0) and _G.AttackRange or 60)
+                                                <= (_G.AttackRange or 60)
                                         then
                                             dpPwXvsnf[#dpPwXvsnf + 1] = { ojOlVgjSD, qCQzaheNCw }
                                         end
@@ -19908,25 +20045,24 @@ while thing == thing2 and counter < 1 do
                         local OJtbWNYtEf = pyBDSkDLUptn:FindFirstChildOfClass("Tool")
                         local MapdgyHbdb = false
                         local CLuHImERjG = false
-                        if OJtbWNYtEf and OJtbWNYtEf:IsA("Tool") then
-                            -- Normalize weapon metadata; some fighting styles expose
-                            -- "Combat" or differently-cased tooltip values.
-                            local NGzWLZOmq = string.lower(tostring(OJtbWNYtEf.ToolTip or ""))
-                            local PEmzBdykw = string.lower(tostring(OJtbWNYtEf:GetAttribute("WeaponType") or ""))
-                            local toolName = string.lower(OJtbWNYtEf.Name)
-                            if _G.AutoAttack and (
-                                NGzWLZOmq == "melee"
-                                or NGzWLZOmq == "sword"
-                                or PEmzBdykw == "melee"
-                                or PEmzBdykw == "sword"
-                                or toolName == "combat"
-                                or toolName:find("fighting style", 1, true) ~= nil
-                            ) then
+                        if OJtbWNYtEf then
+                            local NGzWLZOmq = OJtbWNYtEf.ToolTip
+                            local PEmzBdykw = OJtbWNYtEf:GetAttribute("WeaponType")
+                            if
+                                _G.AutoAttack
+                                and (
+                                    NGzWLZOmq == "Melee"
+                                    or NGzWLZOmq == "Sword"
+                                    or PEmzBdykw == "Melee"
+                                    or PEmzBdykw == "Sword"
+                                )
+                            then
                                 MapdgyHbdb = true
-                            elseif _G.FastFruitM1 and _G.AutoAttack and (
-                                NGzWLZOmq == "blox fruit"
-                                or OJtbWNYtEf:FindFirstChild("LeftClickRemote")
-                            ) then
+                            elseif
+                                _G.FastFruitM1
+                                and _G.AutoAttack
+                                and (NGzWLZOmq == "Blox Fruit" or OJtbWNYtEf:FindFirstChild("LeftClickRemote"))
+                            then
                                 CLuHImERjG = true
                             end
                         end
