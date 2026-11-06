@@ -8044,7 +8044,10 @@ while thing == thing2 and counter < 1 do
                                                         end
                                                         IaEKnTvT.HumanoidRootPart.CanCollide = false
                                                         IaEKnTvT.Humanoid.WalkSpeed = 0
-                                                        IaEKnTvT.Head.CanCollide = false
+                                                        local mobHead = IaEKnTvT:FindFirstChild("Head")
+                                    if mobHead and mobHead:IsA("BasePart") then
+                                        mobHead.CanCollide = false
+                                    end
                                                         IaEKnTvT.HumanoidRootPart.Size = Vector3.new(70, 70, 70)
                                                         StartBring = true
                                                         MonFarm = IaEKnTvT.Name
@@ -19889,7 +19892,6 @@ while thing == thing2 and counter < 1 do
         elseif 16 % 16 ~= 0 then
         end
         if true then
-            _G.AutoAttack = true
             v496:AddToggle({
                 Name = "Fast Attack",
                 Description = "",
@@ -19970,113 +19972,169 @@ while thing == thing2 and counter < 1 do
         end
         if 52 - 52 == 0 then
             task.spawn(function()
-                local lastAttackAt = 0
-                local lastAttackWarningAt = 0
-                while task.wait(0.03) do
-                    if _G.AutoAttack then
-                        local ok, err = pcall(function()
-                            local Players = game:GetService("Players")
-                            local ReplicatedStorage = game:GetService("ReplicatedStorage")
-                            local player = Players.LocalPlayer
-                            local character = player and player.Character
-                            local root = character and character:FindFirstChild("HumanoidRootPart")
-                            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-                            if not character or not root or not humanoid or humanoid.Health <= 0 then
-                                return
+                local WYbeuMKFIi = 0
+                local dCqhFVuLH = 0
+                while true do
+                    local CrNwydJnrMBZ = _G.FastAttackSpeed or 200
+                    local VoQCXMtAd = 1
+                    if CrNwydJnrMBZ <= 200 then
+                        VoQCXMtAd = CrNwydJnrMBZ / 200
+                    else
+                        VoQCXMtAd = 1 + (CrNwydJnrMBZ - 200) / 50
+                    end
+                    WYbeuMKFIi = WYbeuMKFIi + VoQCXMtAd
+                    local dUuIFIwu = math.floor(WYbeuMKFIi)
+                    WYbeuMKFIi = WYbeuMKFIi - dUuIFIwu
+                    task.wait(0.0001)
+                    if dUuIFIwu > 0 and _G.AutoAttack then
+                        _G.FastAttackMultiplier = dUuIFIwu
+                        local pyBDSkDLUptn = game.Players.LocalPlayer.Character
+                        local sPhJHtENl = pyBDSkDLUptn
+                            and pyBDSkDLUptn:FindFirstChild("HumanoidRootPart")
+                        if not pyBDSkDLUptn or not sPhJHtENl then
+                            continue
+                        end
+                        local cKvOCAcSR, eETQuLVJ, RmEOjtdhW = ipairs({ workspace.Enemies, workspace.Characters })
+                        local dpPwXvsnf = {}
+                        while true do
+                            local RYUVWEhLfmlp
+                            RmEOjtdhW, RYUVWEhLfmlp = cKvOCAcSR(eETQuLVJ, RmEOjtdhW)
+                            if RmEOjtdhW == nil then
+                                break
                             end
-
-                            -- Only attack with an equipped melee/sword tool.
-                            local tool = character:FindFirstChildOfClass("Tool")
-                            if not tool then return end
-                            local tooltip = string.lower(tostring(tool.ToolTip or ""))
-                            local weaponType = string.lower(tostring(tool:GetAttribute("WeaponType") or ""))
-                            local isMelee = tooltip == "melee" or tooltip == "sword"
-                                or weaponType == "melee" or weaponType == "sword"
-                            if not isMelee then return end
-
-                            local enemies = workspace:FindFirstChild("Enemies")
-                            if not enemies then return end
-                            local range = tonumber(_G.AttackRange) or 60
-                            if range < 1 then range = 60 end
-                            local farmName = (type(MonFarm) == "string" and MonFarm ~= "" and MonFarm)
-                                or (type(Mon) == "string" and Mon ~= "" and Mon)
-
-                            -- Pick up to two distinct live mobs; one hit part per mob.
-                            local candidates = {}
-                            for _, enemy in ipairs(enemies:GetChildren()) do
-                                if not farmName or enemy.Name == farmName then
-                                    local enemyHumanoid = enemy:FindFirstChildOfClass("Humanoid")
-                                    local enemyRoot = enemy:FindFirstChild("HumanoidRootPart")
-                                    if enemyHumanoid and enemyRoot and enemyHumanoid.Health > 0 then
-                                        local distance = (enemyRoot.Position - root.Position).Magnitude
-                                        if distance <= range then
-                                            local hitPart = enemy:FindFirstChild("Head") or enemyRoot
-                                            candidates[#candidates + 1] = {
-                                                model = enemy,
-                                                part = hitPart,
-                                                distance = distance,
-                                            }
+                            local KteaNthyk, WMvpNAYvVbia, cmCnKQiE =
+                                ipairs(RYUVWEhLfmlp and RYUVWEhLfmlp:GetChildren() or {})
+                            while true do
+                                local ojOlVgjSD
+                                cmCnKQiE, ojOlVgjSD = KteaNthyk(WMvpNAYvVbia, cmCnKQiE)
+                                if cmCnKQiE == nil then
+                                    break
+                                end
+                                local yADHUQCYZboX = ojOlVgjSD:FindFirstChild("HumanoidRootPart")
+                                local cJJcnmYzsyim = ojOlVgjSD:FindFirstChild("Humanoid")
+                                if
+                                    ojOlVgjSD ~= pyBDSkDLUptn
+                                    and (
+                                        yADHUQCYZboX
+                                        and (
+                                            cJJcnmYzsyim
+                                            and (
+                                                cJJcnmYzsyim.Health > 0
+                                                and (yADHUQCYZboX.Position - sPhJHtENl.Position).Magnitude
+                                                    <= (_G.AttackRange or 60)
+                                            )
+                                        )
+                                    )
+                                then
+                                    local bNthyZwJcQOc, kBTLPuSuG, nfqFdsXlCV = ipairs(ojOlVgjSD:GetChildren())
+                                    while true do
+                                        local qCQzaheNCw
+                                        nfqFdsXlCV, qCQzaheNCw = bNthyZwJcQOc(kBTLPuSuG, nfqFdsXlCV)
+                                        if nfqFdsXlCV == nil then
+                                            break
+                                        end
+                                        if
+                                            qCQzaheNCw:IsA("BasePart")
+                                            and (yADHUQCYZboX.Position - sPhJHtENl.Position).Magnitude
+                                                <= (_G.AttackRange or 60)
+                                        then
+                                            dpPwXvsnf[#dpPwXvsnf + 1] = { ojOlVgjSD, qCQzaheNCw }
                                         end
                                     end
                                 end
                             end
-                            table.sort(candidates, function(a, b)
-                                return a.distance < b.distance
-                            end)
-                            local hitList = {}
-                            for i = 1, math.min(2, #candidates) do
-                                hitList[i] = { candidates[i].model, candidates[i].part }
+                        end
+                        local OJtbWNYtEf = pyBDSkDLUptn:FindFirstChildOfClass("Tool")
+                        local MapdgyHbdb = false
+                        local CLuHImERjG = false
+                        if OJtbWNYtEf then
+                            local NGzWLZOmq = OJtbWNYtEf.ToolTip
+                            local PEmzBdykw = OJtbWNYtEf:GetAttribute("WeaponType")
+                            if
+                                _G.AutoAttack
+                                and (
+                                    NGzWLZOmq == "Melee"
+                                    or NGzWLZOmq == "Sword"
+                                    or PEmzBdykw == "Melee"
+                                    or PEmzBdykw == "Sword"
+                                )
+                            then
+                                MapdgyHbdb = true
+                            elseif
+                                _G.FastFruitM1
+                                and _G.AutoAttack
+                                and (NGzWLZOmq == "Blox Fruit" or OJtbWNYtEf:FindFirstChild("LeftClickRemote"))
+                            then
+                                CLuHImERjG = true
                             end
-                            if #hitList == 0 then return end
-
-                            -- Keep the cadence bounded; avoid flooding remotes or sending
-                            -- repeated copies of the same hit packet in a single frame.
-                            local speed = math.clamp(tonumber(_G.FastAttackSpeed) or 200, 50, 300)
-                            local attackInterval = 0.34 - ((speed - 50) / 250) * 0.22
-                            local now = os.clock()
-                            if now - lastAttackAt < attackInterval then return end
-                            lastAttackAt = now
-
-                            local modules = ReplicatedStorage:FindFirstChild("Modules")
-                            local netFolder = modules and modules:FindFirstChild("Net")
-                            if not netFolder then
-                                error("ReplicatedStorage.Modules.Net not found")
-                            end
-                            -- Preserve the hub's original Net registration step when available.
-                            if netFolder:IsA("ModuleScript") then
-                                local loaded, netApi = pcall(require, netFolder)
-                                if loaded and type(netApi) == "table" and type(netApi.RemoteEvent) == "function" then
-                                    pcall(function()
-                                        netApi:RemoteEvent("RegisterHit", true)
-                                    end)
+                        end
+                        if #dpPwXvsnf > 0 then
+                            -- Original hit registration is retained; cap one packet at two unique mobs.
+                            local limitedHits, seenMobs, uniqueMobCount = {}, {}, 0
+                            for _, hit in ipairs(dpPwXvsnf) do
+                                local mob = hit[1]
+                                if mob and not seenMobs[mob] then
+                                    if uniqueMobCount >= 2 then break end
+                                    seenMobs[mob] = true
+                                    uniqueMobCount = uniqueMobCount + 1
+                                end
+                                if mob and seenMobs[mob] then
+                                    limitedHits[#limitedHits + 1] = hit
                                 end
                             end
-                            local registerAttack = netFolder:FindFirstChild("RE/RegisterAttack")
-                            local registerHit = netFolder:FindFirstChild("RE/RegisterHit")
-                            if not registerAttack or not registerAttack:IsA("RemoteEvent") then
-                                error("RE/RegisterAttack RemoteEvent not found")
+                            dpPwXvsnf = limitedHits
+                            if MapdgyHbdb then
+                                pcall(function()
+                                    require(game.ReplicatedStorage.Modules.Net):RemoteEvent("RegisterHit", true)
+                                    local idWpJrZsJ = _G.FastAttackMultiplier or 1
+                                    for i = 1, idWpJrZsJ do
+                                        game.ReplicatedStorage.Modules.Net["RE/RegisterAttack"]:FireServer()
+                                        local zGgPeuGOz = dpPwXvsnf[1][1]:FindFirstChild("Head")
+                                        if zGgPeuGOz then
+                                            game.ReplicatedStorage.Modules.Net["RE/RegisterHit"]:FireServer(
+                                                zGgPeuGOz,
+                                                dpPwXvsnf,
+                                                {},
+                                                tostring(game.Players.LocalPlayer.UserId):sub(2, 4)
+                                                    .. tostring(coroutine.running()):sub(11, 15)
+                                            )
+                                            cloneref(u4):FireServer(
+                                                string.gsub("RE/RegisterHit", ".", function(p31)
+                                                    return string.char(
+                                                        bit32.bxor(
+                                                            string.byte(p31),
+                                                            math.floor(workspace:GetServerTimeNow() / 10 % 10) + 1
+                                                        )
+                                                    )
+                                                end),
+                                                bit32.bxor(
+                                                    u5 + 909090,
+                                                    game.ReplicatedStorage.Modules.Net.seed:InvokeServer() * 2
+                                                ),
+                                                zGgPeuGOz,
+                                                dpPwXvsnf
+                                            )
+                                        end
+                                    end
+                                end)
+                            elseif CLuHImERjG and OJtbWNYtEf:FindFirstChild("LeftClickRemote") then
+                                pcall(function()
+                                    local rXQffbaDAoyo = os.clock()
+                                    if rXQffbaDAoyo - dCqhFVuLH >= 0.22 then
+                                        dCqhFVuLH = rXQffbaDAoyo
+                                        local SdlopXKPWT = dpPwXvsnf[1][2].Position
+                                        local XRATBwLC = sPhJHtENl.Position
+                                        local jPgVnoqv = (SdlopXKPWT - XRATBwLC).Unit
+                                        _G.FruitCombo = (_G.FruitCombo or 0) % 3 + 1
+                                        OJtbWNYtEf.LeftClickRemote:FireServer(jPgVnoqv, _G.FruitCombo)
+                                    end
+                                end)
                             end
-                            if not registerHit or not registerHit:IsA("RemoteEvent") then
-                                error("RE/RegisterHit RemoteEvent not found")
-                            end
-
-                            local primaryPart = hitList[1][2]
-                            registerAttack:FireServer()
-                            registerHit:FireServer(
-                                primaryPart,
-                                hitList,
-                                {},
-                                tostring(player.UserId):sub(2, 4)
-                                    .. tostring(coroutine.running()):sub(11, 15)
-                            )
-                        end)
-                        if not ok and os.clock() - lastAttackWarningAt > 5 then
-                            lastAttackWarningAt = os.clock()
-                            warn("[Fast Attack] " .. tostring(err))
                         end
                     end
                 end
             end)
+        elseif not (96 == 96) then
         end
         function InMyNetWork(v1168)
             if not isnetworkowner then
@@ -21032,14 +21090,12 @@ while thing == thing2 and counter < 1 do
                             CheckQuest()
                         end
                         local enemiesFolder = game:GetService("Workspace"):FindFirstChild("Enemies")
-                        local broughtCount = 0
                         if not enemiesFolder or not StartBring or not PosMon then
                             return
                         end
-                        for soEUdQkaBM, IaEKnTvT in ipairs(enemiesFolder:GetChildren()) do
-                            if broughtCount >= 6 then
-                                break
-                            end
+                        local broughtCount = 0
+                        for soEUdQkaBM, IaEKnTvT in pairs(enemiesFolder:GetChildren()) do
+                            if broughtCount >= 6 then break end
                             if
                                 StartBring
                                 and (IaEKnTvT.Name == MonFarm or IaEKnTvT.Name == Mon)
@@ -21060,10 +21116,7 @@ while thing == thing2 and counter < 1 do
                                     alhITGxKZf.Size = Vector3.new(60, 60, 60)
                                     alhITGxKZf.Transparency = 1
                                     alhITGxKZf.CanCollide = false
-                                    local head = IaEKnTvT:FindFirstChild("Head")
-                                    if head and head:IsA("BasePart") then
-                                        head.CanCollide = false
-                                    end
+                                    IaEKnTvT.Head.CanCollide = false
                                     WcQutptYFkM.JumpPower = 0
                                     WcQutptYFkM.WalkSpeed = 0
                                     WcQutptYFkM:ChangeState(11)
