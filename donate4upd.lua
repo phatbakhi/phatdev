@@ -2277,7 +2277,34 @@ do
 	end
 end
 
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Banana/refs/heads/main/Banana/ui.luau"))()
+-- Load the UI library after replacing its default floating-toggle logo.
+-- This sets the image BEFORE imgHide is created, preventing the old yellow icon
+-- from appearing first and then being swapped (the cause of the flicker).
+local uiSource = game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Banana/refs/heads/main/Banana/ui.luau")
+local oldLogoLine = '["Logo Image"] = "rbxassetid://5009915795",'
+local newLogoLine = '["Logo Image"] = "rbxassetid://105588084118331",'
+local logoStart, logoEnd = string.find(uiSource, oldLogoLine, 1, true)
+
+if logoStart then
+	uiSource = string.sub(uiSource, 1, logoStart - 1)
+		.. newLogoLine
+		.. string.sub(uiSource, logoEnd + 1)
+else
+	-- Fallback for a minor upstream formatting change; still replace only the
+	-- library's default logo asset and leave all other source code untouched.
+	local replaced
+	uiSource, replaced = string.gsub(
+		uiSource,
+		'rbxassetid://5009915795',
+		'rbxassetid://105588084118331',
+		1
+	)
+	if replaced == 0 then
+		error("TanPhat Hub: could not locate the UI library default toggle logo.")
+	end
+end
+
+local lib = loadstring(uiSource)()
 
 -- TanPhat Hub: blue GUI theme
 local TanPhatBlue = Color3.fromRGB(35, 145, 255)
@@ -2323,37 +2350,6 @@ local t15 = {
 }
 
 lib.ToggleUI()
-
--- Replace only the floating hub toggle image AFTER the UI library creates it.
--- The previous code searched too early, before ToggleUI() had created the button.
-task.spawn(function()
-	task.wait(0.5)
-
-	local imageId = "rbxassetid://130927853109672"
-	local containers = {
-		game:GetService("CoreGui"),
-		game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-	}
-
-	if typeof(gethui) == "function" then
-		local ok, hiddenGui = pcall(gethui)
-		if ok and hiddenGui then
-			table.insert(containers, hiddenGui)
-		end
-	end
-
-	for _, container in ipairs(containers) do
-		for _, gui in ipairs(container:GetDescendants()) do
-			if gui.Name == "Nousigi Hub Btn" then
-				for _, object in ipairs(gui:GetDescendants()) do
-					if object:IsA("ImageLabel") or object:IsA("ImageButton") then
-						object.Image = imageId
-					end
-				end
-			end
-		end
-	end
-end)
 
 do
 	local v239 = t15.Info:AddLeftGroupbox("Time Zone"):AddLabel("")
