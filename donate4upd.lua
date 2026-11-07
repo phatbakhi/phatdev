@@ -2305,17 +2305,6 @@ local v237 = lib:CreateWindow({
 	Image = "rbxassetid://105588084118331"
 })
 
--- Only replace the floating UI toggle icon; leave all other UI and functions unchanged.
-do
-	local toggleGui = game:GetService("CoreGui"):FindFirstChild("Nousigi Hub Btn")
-	if toggleGui then
-		for _, object in ipairs(toggleGui:GetDescendants()) do
-			if object:IsA("ImageLabel") then
-				object.Image = "rbxassetid://105588084118331"
-			end
-		end
-	end
-end
 local t15 = {
 	Info = v237:AddTab("Info And Status"),
 	Main = v237:AddTab("Farming"),
@@ -2334,6 +2323,37 @@ local t15 = {
 }
 
 lib.ToggleUI()
+
+-- Replace only the floating hub toggle image AFTER the UI library creates it.
+-- The previous code searched too early, before ToggleUI() had created the button.
+task.spawn(function()
+	task.wait(0.5)
+
+	local imageId = "rbxassetid://105588084118331"
+	local containers = {
+		game:GetService("CoreGui"),
+		game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+	}
+
+	if typeof(gethui) == "function" then
+		local ok, hiddenGui = pcall(gethui)
+		if ok and hiddenGui then
+			table.insert(containers, hiddenGui)
+		end
+	end
+
+	for _, container in ipairs(containers) do
+		for _, gui in ipairs(container:GetDescendants()) do
+			if gui.Name == "Nousigi Hub Btn" then
+				for _, object in ipairs(gui:GetDescendants()) do
+					if object:IsA("ImageLabel") or object:IsA("ImageButton") then
+						object.Image = imageId
+					end
+				end
+			end
+		end
+	end
+end)
 
 do
 	local v239 = t15.Info:AddLeftGroupbox("Time Zone"):AddLabel("")
