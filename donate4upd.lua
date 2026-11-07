@@ -31492,6 +31492,6 @@ end
 lib:Notify({
 	Title = "TanPhat Hub",
 	Description = "TanPhat Hub comeback",
-	Icon = "rbxassetid://5009915795",
+	Icon = "rbxassetid://1000025024",
 	Duration = 5
 })
