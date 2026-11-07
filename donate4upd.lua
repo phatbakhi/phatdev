@@ -2302,7 +2302,7 @@ end
 local v237 = lib:CreateWindow({
 	Title = "TanPhat Hub",
 	Subtitle = "Blox Fruit Script",
-	Image = "rbxassetid://105588084118331"
+	Image = "rbxassetid://130927853109672"
 })
 local t15 = {
 	Info = v237:AddTab("Info And Status"),
@@ -31492,6 +31492,6 @@ end
 lib:Notify({
 	Title = "TanPhat Hub",
 	Description = "TanPhat Hub is best",
-	Icon = "rbxassetid://105588084118331",
+	Icon = "rbxassetid://130927853109672",
 	Duration = 5
 })
