@@ -19891,6 +19891,9 @@ while thing == thing2 and counter < 1 do
             end)
         elseif 16 % 16 ~= 0 then
         end
+        -- Explicitly initialize the flag: some UI libraries do not invoke the
+        -- callback when applying a toggle's Default value.
+        if _G.AutoAttack == nil then _G.AutoAttack = true end
         if true then
             v496:AddToggle({
                 Name = "Fast Attack",
@@ -21083,55 +21086,57 @@ while thing == thing2 and counter < 1 do
         elseif (not (33 < 60)) == (33 >= 60) then
         end
         if 43 - 43 == 0 then
-            spawn(function()
-                while task.wait() do
-                    pcall(function()
-                        if type(CheckQuest) == "function" then
-                            CheckQuest()
-                        end
-                        local enemiesFolder = game:GetService("Workspace"):FindFirstChild("Enemies")
-                        if not enemiesFolder or not StartBring or not PosMon then
+            task.spawn(function()
+                local lastBringWarning = 0
+                while task.wait(0.1) do
+                    local ok, err = pcall(function()
+                        -- Quest selection is handled by the farm worker, not here.
+                        local enemiesFolder = workspace:FindFirstChild("Enemies")
+                        local targetCFrame = PosMon
+                        local farmName = MonFarm
+                        local questName = Mon
+                        if not StartBring or not enemiesFolder or typeof(targetCFrame) ~= "CFrame" or (not farmName and not questName) then
                             return
                         end
+
                         local broughtCount = 0
-                        for soEUdQkaBM, IaEKnTvT in pairs(enemiesFolder:GetChildren()) do
+                        for _, mob in ipairs(enemiesFolder:GetChildren()) do
                             if broughtCount >= 6 then break end
-                            if
-                                StartBring
-                                and (IaEKnTvT.Name == MonFarm or IaEKnTvT.Name == Mon)
-                                and IaEKnTvT:FindFirstChild("Humanoid")
-                                and IaEKnTvT:FindFirstChild("HumanoidRootPart")
-                                and IaEKnTvT.Humanoid.Health > 0
-                            then
-                                local alhITGxKZf = IaEKnTvT.HumanoidRootPart
-                                local WcQutptYFkM = IaEKnTvT.Humanoid
-                                if
-                                    _G.BringDistance
-                                    and PosMon
-                                    and (alhITGxKZf.Position - PosMon.Position).Magnitude <= _G.BringDistance
-                                then
-                                    broughtCount = broughtCount + 1
-                                    alhITGxKZf.CFrame = PosMon
-                                    alhITGxKZf.Anchored = false
-                                    alhITGxKZf.Size = Vector3.new(60, 60, 60)
-                                    alhITGxKZf.Transparency = 1
-                                    alhITGxKZf.CanCollide = false
-                                    IaEKnTvT.Head.CanCollide = false
-                                    WcQutptYFkM.JumpPower = 0
-                                    WcQutptYFkM.WalkSpeed = 0
-                                    WcQutptYFkM:ChangeState(11)
-                                    WcQutptYFkM:ChangeState(14)
-                                    local aGPlHxmLCmS = WcQutptYFkM:FindFirstChild("Animator")
-                                    if aGPlHxmLCmS then
-                                        aGPlHxmLCmS:Destroy()
-                                    end
-                                    if sethiddenproperty then
-                                        sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                            if (farmName and mob.Name == farmName) or (questName and mob.Name == questName) then
+                                local humanoid = mob:FindFirstChildOfClass("Humanoid")
+                                local root = mob:FindFirstChild("HumanoidRootPart")
+                                if humanoid and root and humanoid.Health > 0 and root:IsA("BasePart") then
+                                    local distance = (root.Position - targetCFrame.Position).Magnitude
+                                    if distance <= (tonumber(_G.BringDistance) or 320) then
+                                        broughtCount += 1
+                                        root.Anchored = false
+                                        root.CFrame = targetCFrame
+                                        root.Size = Vector3.new(60, 60, 60)
+                                        root.Transparency = 1
+                                        root.CanCollide = false
+                                        local head = mob:FindFirstChild("Head")
+                                        if head and head:IsA("BasePart") then
+                                            head.CanCollide = false
+                                        end
+                                        humanoid.WalkSpeed = 0
+                                        humanoid.JumpPower = 0
+                                        pcall(function()
+                                            humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+                                        end)
+                                        if sethiddenproperty then
+                                            pcall(function()
+                                                sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
+                                            end)
+                                        end
                                     end
                                 end
                             end
                         end
                     end)
+                    if not ok and os.clock() - lastBringWarning >= 5 then
+                        lastBringWarning = os.clock()
+                        warn("[Bring Mob] " .. tostring(err))
+                    end
                 end
             end)
         end
