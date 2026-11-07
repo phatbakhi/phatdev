@@ -2329,7 +2329,7 @@ lib.ToggleUI()
 task.spawn(function()
 	task.wait(0.5)
 
-	local imageId = "rbxassetid://105588084118331"
+	local imageId = "rbxassetid://130927853109672"
 	local containers = {
 		game:GetService("CoreGui"),
 		game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
