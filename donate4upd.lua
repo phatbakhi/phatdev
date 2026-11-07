@@ -2304,6 +2304,20 @@ else
 	end
 end
 
+-- Force the exact floating toggle ImageLabel to use the uploaded image.
+-- This assignment is inside the library source, before imgHide is instantiated.
+local toggleImageLine = 'imgHide.Image = getgenv().UIColor["Logo Image"]'
+local forcedToggleImageLine = 'imgHide.Image = "rbxassetid://105588084118331"'
+local toggleStart, toggleEnd = string.find(uiSource, toggleImageLine, 1, true)
+
+if toggleStart then
+	uiSource = string.sub(uiSource, 1, toggleStart - 1)
+		.. forcedToggleImageLine
+		.. string.sub(uiSource, toggleEnd + 1)
+else
+	error("TanPhat Hub: could not locate the toggle ImageLabel assignment in the UI library.")
+end
+
 local lib = loadstring(uiSource)()
 
 -- TanPhat Hub: blue GUI theme
