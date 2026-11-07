@@ -2278,8 +2278,29 @@ do
 end
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloxfruitsnokey/Banana/refs/heads/main/Banana/ui.luau"))()
+
+-- TanPhat Hub: blue GUI theme
+local TanPhatBlue = Color3.fromRGB(35, 145, 255)
+local TanPhatBlueLight = Color3.fromRGB(75, 180, 255)
+local TanPhatBlueDark = Color3.fromRGB(20, 105, 210)
+if getgenv and getgenv().UIColor then
+	local ui = getgenv().UIColor
+	ui["Border Color"] = TanPhatBlue
+	ui["Search Icon Highlight Color"] = TanPhatBlueLight
+	ui["Title Text Color"] = TanPhatBlueLight
+	ui["Page Selected Color"] = TanPhatBlue
+	ui["Section Underline Color"] = TanPhatBlue
+	ui["Toggle Border Color"] = TanPhatBlue
+	ui["Button Color"] = TanPhatBlue
+	ui["Dropdown Selected Color"] = TanPhatBlueLight
+	ui["Dropdown Selected Check Color"] = TanPhatBlueDark
+	ui["Textbox Highlight Color"] = TanPhatBlue
+	ui["Box Highlight Color"] = TanPhatBlue
+	ui["Slider Line Color"] = TanPhatBlue
+	ui["Slider Highlight Color"] = TanPhatBlueDark
+end
 local v237 = lib:CreateWindow({
-	Title = "Banana Hub",
+	Title = "TanPhat Hub",
 	Subtitle = "Blox Fruit Script",
 	Image = "rbxassetid://5009915795"
 })
@@ -31469,8 +31490,8 @@ do
 end
 
 lib:Notify({
-	Title = "Banana Hub",
-	Description = "Banana Hub comeback",
+	Title = "TanPhat Hub",
+	Description = "TanPhat Hub comeback",
 	Icon = "rbxassetid://5009915795",
 	Duration = 5
 })
