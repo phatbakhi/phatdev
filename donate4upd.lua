@@ -2302,8 +2302,20 @@ end
 local v237 = lib:CreateWindow({
 	Title = "TanPhat Hub",
 	Subtitle = "Blox Fruit Script",
-	Image = "rbxassetid://130927853109672"
+	Image = "rbxassetid://105588084118331"
 })
+
+-- Only replace the floating UI toggle icon; leave all other UI and functions unchanged.
+do
+	local toggleGui = game:GetService("CoreGui"):FindFirstChild("Nousigi Hub Btn")
+	if toggleGui then
+		for _, object in ipairs(toggleGui:GetDescendants()) do
+			if object:IsA("ImageLabel") then
+				object.Image = "rbxassetid://105588084118331"
+			end
+		end
+	end
+end
 local t15 = {
 	Info = v237:AddTab("Info And Status"),
 	Main = v237:AddTab("Farming"),
@@ -31492,6 +31504,6 @@ end
 lib:Notify({
 	Title = "TanPhat Hub",
 	Description = "TanPhat Hub is best",
-	Icon = "rbxassetid://130927853109672",
+	Icon = "rbxassetid://105588084118331",
 	Duration = 5
 })
