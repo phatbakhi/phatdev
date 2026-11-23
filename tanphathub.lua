@@ -1,25 +1,39 @@
----decode by tanphat hub
-        task.delay(120, getgenv().__BF_SHOW_UI)
-        Runtime.guardState = bit32.bor(Runtime.guardState23, Runtime.numberValue11)
-        pcall(result2.CreateNoti, {
-            Title = "Banana Cat Hub",
-            Desc = "Loading... the menu will appear when ready.",
-            ShowTime = 5,
-        })
-        print("[Banana Cat Hub] Loading 01_shop.lua (12%)")
-        PageShop = Main.CreatePage({Page_Name = "Shop", Page_Title = "Shop"})
-        local options = result2.Options
-        getgenv().Options = result2.Options
-        SectionShopMisc = PageShop.CreateSection("Misc Shop")
-        Remote = handler
-        getgenv().tablefruitausea3 = {}
-        local value = bit32.lshift(Runtime.guardKey28, 21)
-        whitelistedfruit = {}
-        TableDevilFruit = {}
-        Runtime.n02 = 1
-        Runtime.q02 = 5
-        nextEntry3 = 0
-        return options, handler, value
+---decode by tanphat 
+   task.delay(120, function()
+    if type(getgenv().__BF_SHOW_UI) == "function" then
+        getgenv().__BF_SHOW_UI()
+    end
+end)
+
+local options = {}
+local handler = nil
+local value = 0
+
+pcall(function()
+    print("[Banana Cat Hub] Loading 01_shop.lua (12%)")
+end)
+
+local PageShop = {
+    CreateSection = function(name)
+        return {
+            Name = name
+        }
+    end
+}
+
+local SectionShopMisc = PageShop.CreateSection("Misc Shop")
+
+getgenv().Options = options
+getgenv().tablefruitausea3 = {}
+
+local whitelistedfruit = {}
+local TableDevilFruit = {}
+
+local n02 = 1
+local q02 = 5
+local nextEntry3 = 0
+
+return options, handler, value
     end
 
     -- Load fruit and world data
