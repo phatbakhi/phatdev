@@ -11,15 +11,6 @@
         local options = result2.Options
         getgenv().Options = result2.Options
         SectionShopMisc = PageShop.CreateSection("Misc Shop")
-
-        local handler = function(inputValue, inputValue2, inputValue3)
-            if not inputValue and inputValue3 then
-                game.ReplicatedStorage.Remotes.CommF_:InvokeServer(inputValue2, true)
-                return
-            end
-            game.ReplicatedStorage.Remotes.CommF_:InvokeServer(inputValue, inputValue2, inputValue3)
-        end
-
         Remote = handler
         getgenv().tablefruitausea3 = {}
         local value = bit32.lshift(Runtime.guardKey28, 21)
