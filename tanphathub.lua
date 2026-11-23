@@ -1,39 +1,857 @@
----decode by tanphat 
-   task.delay(120, function()
-    if type(getgenv().__BF_SHOW_UI) == "function" then
-        getgenv().__BF_SHOW_UI()
+local Features = {}
+local blackScreen, blackScreen2, HttpService, rejectWhitelist, nextEntry2, nextEntry3, nextEntry
+local logPrefix, hasEntry, entryKey, hasEntry2, entryValue, entryKey2, hasEntry3, entryValue2
+local result, entryKey3, hasEntry4, entryValue3, entryKey4, hasEntry5, entryValue4, entryKey5
+local hasEntry6, entryValue5, entryKey6, hasEntry7, entryValue6, entryKey7, hasEntry8, entryKey8
+local entryKey9, hasEntry9, entryValue7, entryKey10, hasEntry10, entryValue8, entryKey11, hasEntry11
+local entryValue9, entryKey12, hasEntry12, entryValue10, hasEntry13, entryKey13, hasEntry14
+local entryKey14, entryValue11, hasEntry15, hasEntry22, hasEntry32, hasEntry42, entryValue22
+local entryValue32, entryKey15, entryValue42, entryValue52, entryKey22, result2, createToggle
+local createToggle2, tweenService
+local Runtime = {}
+
+local function createIterator(iterator, state, control)
+    return coroutine.wrap(function()
+        for key, value in iterator, state, control do
+            coroutine.yield(true, key, value)
+        end
+    end)
+end
+
+Runtime.iterationResults = {}
+do
+    Runtime.features = {}
+
+    -- Verify whitelist session
+    function Features.verifyWhitelistSession()
+        local sharedState, sharedState2, sharedState3, sharedState4, sharedState5, sharedState6 = {}, {}, {}, {}, {}, {}
+        Runtime.updateWhitelistStatus("Verifying whitelist...")
+        os.clock()
+        sharedState.value = tostring(os.time())
+        sharedState2.value = Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
+            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "key",
+            "1",
+            Runtime.whitelistKey
+        ))
+        sharedState3.value = Runtime.encodeHex(Runtime.guardKey20 + 428703842, Runtime.transformWhitelistField(
+            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "hwid",
+            "2",
+            Runtime.hardwareId
+        ))
+        sharedState4.value = Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
+            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "proof",
+            "3",
+            Runtime.whitelistKey .. ":" .. Runtime.hardwareId .. ":" .. sharedState.value
+        ))
+        local value = bit32.band(Runtime.guardKey20, Runtime.numberValue6)
+        sharedState5.value = Runtime.encodeHex(Runtime.guardState18 - 872440572, Runtime.transformWhitelistField(
+            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "name",
+            "4",
+            Runtime.name
+        ))
+        sharedState6.value = Runtime.encodeHex(
+            value + 196051042,
+            Runtime.transformWhitelistField("c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3", "version", "5", "5.0")
+        )
+        Runtime.guardKey = 4201837151
+        local value2, value3, value4 = Runtime.requestWithTimeout({
+            Url = "https://banana-hub.xyz/api/v4/vrf" .. "?k=" .. sharedState2.value .. "&w=" .. sharedState3.value .. "&p=" .. sharedState4.value .. "&n=" .. sharedState5.value .. "&v=" .. sharedState6.value .. "&t=" .. sharedState.value .. "&fast=1",
+            Method = "GET",
+            Headers = {Accept = "application/json"},
+        }, 15)
+        Runtime.verificationResponse = value3
+        Runtime.verificationError = value4
+        return sharedState, sharedState2, sharedState3, sharedState4, sharedState5, sharedState6, value, value2, value3, value4, value2
     end
-end)
 
-local options = {}
-local handler = nil
-local value = 0
+    -- Initialize settings
+    function Features.initializeSettings()
+        local genv = getgenv()
+        local genv2 = getgenv()
+        local genv3 = getgenv()
+        Runtime.guardState21 = Runtime.guardState19 - Runtime.guardKey
+        genv.__BF_BOOT_STAGE = "Before bootstrap"
+        genv2.__BF_BOOT_ERRORS = {}
+        genv3.__BF_BOOT_RECENT = {}
 
-pcall(function()
-    print("[Banana Cat Hub] Loading 01_shop.lua (12%)")
-end)
+        getgenv().__BF_BOOT_SAVE = function()
+            pcall(function()
+                local numberValue = 3019189147
+                local numberValue2 = 4226521538
+                if not isfolder("Banana Cat Hub") then
+                    makefolder("Banana Cat Hub")
+                end
+                local bfBootErrors = getgenv().__BF_BOOT_ERRORS
+                local bfBootRecent = getgenv().__BF_BOOT_RECENT
+                local value = writefile
+                local text = [[Last startup marker: %s
+Elapsed: %.1fs | PlaceId: %s | JobId: %s | Executor: %s
 
-local PageShop = {
-    CreateSection = function(name)
-        return {
-            Name = name
-        }
+Client errors during startup (may include game scripts):
+%s
+
+Recent output, oldest first (last 60 lines, E=error W=warn):
+%s]]
+                local format = ("Last startup marker: %s\010Elapsed: %.1fs | PlaceId: %s | JobId: %s | Executor: %s\010\010Client errors during startup (may include game scripts):\010%s\010\010Recent output, oldest first (last 60 lines, E=error W=warn):\010%s").format
+                local text2 = tostring(getgenv().__BF_BOOT_STAGE)
+                local numberValue3
+                if getgenv().__BF_T0 then
+                    numberValue3 = os.clock() - getgenv().__BF_T0 or 0
+                else
+                    numberValue3 = 0
+                end
+                local text3 = tostring(game.PlaceId)
+                local text4 = tostring(game.JobId)
+                local value2 = tostring
+                local value3 = select(1, identifyexecutor())
+                local value4 = value2(value3 or "?")
+                local text5
+                if #bfBootErrors > 0 then
+                    text5 = table.concat(bfBootErrors, "\n\n") or "(none)"
+                else
+                    text5 = "(none)"
+                end
+                local text6
+                if not (#bfBootRecent > 0) then
+                    text6 = "(none)"
+                    value(
+                        "Banana Cat Hub/StartupError.txt",
+                        format(text, text2, numberValue3, text3, text4, value4, text5, text6)
+                    )
+                    return
+                end
+                text6 = table.concat(bfBootRecent, "\n") or "(none)"
+                value(
+                    "Banana Cat Hub/StartupError.txt",
+                    format(text, text2, numberValue3, text3, text4, value4, text5, text6)
+                )
+            end)
+        end
+
+        getgenv().__BF_BOOT_SAVE()
+        local genv4 = getgenv()
+        local genv5 = getgenv()
+        Runtime.now = os.clock()
+        genv4.__BF_T0 = Runtime.now
+        genv5.__BF_TIMES = {}
+
+        getgenv().__BF_MARK = function(inputValue)
+            local bfTimes = getgenv().__BF_TIMES
+            bfTimes[#bfTimes + 1] = ("%6.2fs  %s"):format(os.clock() - getgenv().__BF_T0, inputValue)
+            pcall(writefile, "Banana Cat Hub/StartupTiming.txt", table.concat(bfTimes, "\n"))
+        end
+
+        Runtime.guardKey27 = Runtime.guardKey + 3790572595
+        getgenv().__BF_MARK("script start")
+        local genv6 = getgenv()
+        local genv7 = getgenv()
+        local genv8 = getgenv()
+
+        local handler = function()
+
+        end
+
+        local handler2 = function()
+
+        end
+
+        genv6.__BF_PROGRESS = handler
+        genv7.__BF_PROGRESS_CLOSE = handler2
+        genv8.__BF_PROGRESS_DONE = nil
+
+        local handler3 = function()
+            local numberValue = 3877586245
+            local numberValue2 = 541401674
+            local numberValue3 = 54730228
+            local TweenService = game:GetService("TweenService")
+            local CoreGui
+            if typeof(gethui) ~= "function" then
+                CoreGui = game:GetService("CoreGui")
+            else
+                CoreGui = gethui()
+                if not CoreGui then
+                    CoreGui = game:GetService("CoreGui")
+                end
+            end
+            local bananaCatLoading = CoreGui:FindFirstChild("BananaCatLoading")
+            if bananaCatLoading then
+                bananaCatLoading:Destroy()
+            end
+
+            local handler4 = function(inputValue, inputValue2, inputValue3, parent)
+                local instance = Instance.new(inputValue)
+                local value, value2, value3 = pairs(inputValue3)
+                local b_1 = 2
+                local nextEntry4 = createIterator(value, value2, value3)
+                local hasEntry16, entryKey16, entryValue12 = nextEntry4()
+                if hasEntry16 then
+                    local value4 = entryKey16
+                    local value5 = entryValue12
+                    while true do
+                        instance[value4] = value5
+                        local hasEntry17, entryKey17, entryValue13 = nextEntry4()
+                        if not hasEntry17 then
+                            break
+                        end
+                        value4 = entryKey17
+                        value5 = entryValue13
+                    end
+                end
+                local value4
+                nextEntry4 = value4
+                local value5
+                local value6 = value5
+                local value7
+                local value8 = value7
+                local b_0
+                b_1 = b_0
+                instance.Parent = parent
+                return instance
+            end
+
+            local numberValue4 = 506598587
+
+            local handler5 = function(inputValue, inputValue2, inputValue3, inputValue4)
+                local tween = TweenService:Create(
+                    inputValue,
+                    TweenInfo.new(inputValue2, inputValue4 or Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
+                    inputValue3
+                )
+                if numberValue4 + 323608175 == 227019298 then
+                    numberValue4 = bit32.bxor(numberValue4, 4070878237)
+                end
+                tween:Play()
+            end
+
+            local color = Color3.new(0.55686277151107788, 0.55686277151107788, 0.57647061347961426)
+            local numberValue5 = numberValue + 2583408844
+            numberValue4 = 386844895
+            local ScreenGui = handler4("ScreenGui", 162918983, {
+                Name = "BananaCatLoading",
+                IgnoreGuiInset = true,
+                ResetOnSpawn = false,
+                DisplayOrder = 1000,
+            })
+
+            local handler6 = function(inputValue, inputValue2, inputValue3)
+                local value, value2, value3 = ipairs(inputValue)
+                local b_1 = 2
+                local nextEntry4 = createIterator(value, value2, value3)
+                local hasEntry16, entryKey16, entryValue12 = nextEntry4()
+                if not hasEntry16 then
+                    return
+                end
+                do
+                    local value4 = entryValue12
+                    while true do
+                        local data
+                        if value4:IsA("TextLabel") then
+                            data = {TextTransparency = inputValue2}
+                        else
+                            data = {BackgroundTransparency = inputValue2}
+                        end
+                        handler5(value4, inputValue3, data)
+                        local hasEntry17, entryKey17, entryValue13 = nextEntry4()
+                        if hasEntry17 then
+                            value4 = entryValue13
+                            continue
+                        end
+                        break
+                    end
+                end
+            end
+
+            local Frame = handler4("Frame", 162918983, {
+                AnchorPoint = Vector2.new(0.5, 0),
+                Position = UDim2.new(0.5, 0, 0, 18),
+                Size = UDim2.new(0, 110, 0, 28),
+                BackgroundColor3 = Color3.new(0, 0, 0),
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                ClipsDescendants = true,
+            }, ScreenGui)
+            local UICorner = handler4("UICorner", 162918983, {CornerRadius = UDim.new(0, 14)}, Frame)
+            local UIStroke = handler4("UIStroke", 162918983, {Color = Color3.new(1, 1, 1), Transparency = 1, Thickness = 1}, Frame)
+            local data = {}
+            local value = bit32.band(numberValue2, numberValue5)
+            data.AnchorPoint = Vector2.new(0, 0.5)
+            data.Position = UDim2.new(0, 16, 0.5, 0)
+            data.Size = UDim2.new(0, 7, 0, 7)
+            data.BackgroundColor3 = Color3.new(0.039215687662363052, 0.51764708757400513, 1)
+            data.BackgroundTransparency = 1
+            local numberValue6 = numberValue3 + value
+            data.BorderSizePixel = 0
+            local Frame2 = handler4("Frame", 162918983, data, Frame)
+            handler4("UICorner", 162918983, {CornerRadius = UDim.new(1, 0)}, Frame2)
+            local TextLabel = handler4("TextLabel", 162918983, {
+                Position = UDim2.new(0, 32, 0, 0),
+                Size = UDim2.new(1, -40, 1, 0),
+                BackgroundTransparency = 1,
+                TextTransparency = 1,
+                Text = "Banana Loading UI Progress",
+                Font = Enum.Font.GothamMedium,
+                TextSize = 13,
+                TextColor3 = Color3.new(1, 1, 1),
+                TextXAlignment = Enum.TextXAlignment.Left,
+            }, Frame)
+            local Frame3 = handler4("Frame", 162918983, {
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                Size = UDim2.new(0, 292, 0, 56),
+                BackgroundTransparency = 1,
+            }, Frame)
+            local numberValue7 = numberValue5 + numberValue6
+            local TextLabel2 = handler4("TextLabel", 162918983, {
+                Position = UDim2.new(0, 18, 0, 9),
+                Size = UDim2.new(0, 210, 0, 20),
+                BackgroundTransparency = 1,
+                TextTransparency = 1,
+                Text = "Banana Loading UI Progress",
+                Font = Enum.Font.GothamSemibold,
+                TextSize = 14,
+                TextColor3 = Color3.new(1, 1, 1),
+                TextXAlignment = Enum.TextXAlignment.Left,
+            }, Frame3)
+            local TextLabel3 = handler4("TextLabel", 162918983, {
+                Position = UDim2.new(0, 214, 0, 9),
+                Size = UDim2.new(0, 60, 0, 20),
+                BackgroundTransparency = 1,
+                TextTransparency = 1,
+                Text = "0%",
+                Font = Enum.Font.GothamMedium,
+                TextSize = 13,
+                TextColor3 = color,
+                TextXAlignment = Enum.TextXAlignment.Right,
+            }, Frame3)
+            local Frame4 = handler4("Frame", 162918983, {
+                Position = UDim2.new(0, 18, 0, 38),
+                Size = UDim2.new(0, 256, 0, 4),
+                BackgroundColor3 = Color3.new(0.22745098173618317, 0.22745098173618317, 0.23529411852359772),
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+            }, Frame3)
+            local Frame5 = handler4("Frame", 162918983, {
+                Size = UDim2.new(0.019999999552965164, 0, 1, 0),
+                BackgroundColor3 = Color3.new(1, 1, 1),
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+            }, Frame4)
+            handler4("UICorner", 162918983, {CornerRadius = UDim.new(1, 0)}, Frame4)
+            local numberValue8 = value - 2214463702 + numberValue7
+            handler4("UICorner", 162918983, {CornerRadius = UDim.new(1, 0)}, Frame5)
+            local data2 = {Frame2, TextLabel}
+            local data3 = {TextLabel2, TextLabel3, Frame4, Frame5}
+            ScreenGui.Parent = CoreGui
+            handler5(
+                Frame,
+                0.55,
+                {Size = UDim2.new(0, 236, 0, 36), BackgroundTransparency = 0},
+                Enum.EasingStyle.Back
+            )
+            local value2 = bit32.band(numberValue7, 3164798330)
+            handler5(UICorner, 0.55, {CornerRadius = UDim.new(0, 18)})
+            handler5(UIStroke, 0.55, {Transparency = 0.86})
+            handler6(data2, 0, 0.4)
+            local condition = false
+            task.spawn(function()
+                while ScreenGui.Parent do
+                    if not condition then
+                        handler5(Frame2, 0.8, {BackgroundTransparency = 0.65})
+                        task.wait(0.8)
+                        if not condition then
+                            handler5(Frame2, 0.8, {BackgroundTransparency = 0})
+                        end
+                        task.wait(0.8)
+                        continue
+                    end
+                    break
+                end
+            end)
+            local now = os.clock()
+            local condition2 = false
+            local condition3 = false
+
+            local handler7 = function()
+                while ScreenGui.Parent do
+                    if not condition3 then
+                        task.wait(1)
+                        if not condition2 and (not condition3 and os.clock() - now > 48) then
+                            if not condition then
+                                getgenv().__BF_PROGRESS(0)
+                            end
+                            condition2 = true
+                            local value3 = TextLabel2
+                            local value4 = TextLabel3
+                            TextLabel2.Text = "Stalled. See StartupError.txt"
+                            value3.TextSize = 12
+                            value4.TextColor3 = Color3.new(1, 0.62352943420410156, 0.039215687662363052)
+                        end
+                        continue
+                    end
+                    break
+                end
+            end
+
+            task.spawn(handler7)
+            local numberValue9 = numberValue8 + 484051506
+
+            local handler8 = function(inputValue)
+                local numberValue10 = 3724671619
+                local value3 = inputValue
+                now = os.clock()
+                if condition2 then
+                    condition2 = false
+                    local value4 = TextLabel2
+                    local value5 = TextLabel3
+                    local value6 = color
+                    TextLabel2.Text = "Banana Loading UI Progress"
+                    value4.TextSize = 14
+                    value5.TextColor3 = value6
+                end
+                if not condition then
+                    condition = true
+                    handler6(data2, 1, 0.15)
+                    handler5(Frame, 0.55, {Size = UDim2.new(0, 310, 0, 60)}, Enum.EasingStyle.Back)
+                    handler5(UICorner, 0.55, {CornerRadius = UDim.new(0, 26)})
+                    local numberValue11 = 395440303
+
+                    local handler9 = function()
+                        handler5(TextLabel2, 0.35, {TextTransparency = 0})
+                        handler5(TextLabel3, 0.35, {TextTransparency = 0})
+                        handler5(Frame4, 0.35, {BackgroundTransparency = 0})
+                        handler5(Frame5, 0.35, {BackgroundTransparency = 0})
+                    end
+
+                    numberValue11 = 496785630
+                    task.delay(0.2, handler9)
+                end
+                TextLabel3.Text = value3 .. "%"
+                return "Z"
+            end
+
+            numberValue9 = 503856431
+            getgenv().__BF_PROGRESS = handler8
+
+            getgenv().__BF_PROGRESS_CLOSE = function()
+                local genv9 = getgenv()
+                local genv10 = getgenv()
+
+                local handler9 = function()
+
+                end
+
+                local handler10 = function()
+
+                end
+
+                genv9.__BF_PROGRESS = handler9
+                genv10.__BF_PROGRESS_CLOSE = handler10
+                condition3 = true
+                local value3 = TextLabel2
+                local value4 = TextLabel3
+                local value5 = color
+                TextLabel2.Text = "Banana Loading UI Progress"
+                value3.TextSize = 14
+                value4.TextColor3 = value5
+                TextLabel3.Text = "Ready"
+                handler5(Frame5, 0.3, {Size = UDim2.new(1, 0, 1, 0)})
+                task.delay(0.7, function()
+                    handler6(data3, 1, 0.25)
+                    handler6(data2, 1, 0.25)
+                    handler5(Frame, 0.45, {Size = UDim2.new(0, 110, 0, 28), BackgroundTransparency = 1})
+                    handler5(UICorner, 0.45, {CornerRadius = UDim.new(0, 14)})
+                    handler5(UIStroke, 0.45, {Transparency = 1})
+                    task.delay(0.6, function()
+                        ScreenGui:Destroy()
+                    end)
+                end)
+            end
+        end
+
+        pcall(handler3)
+        pcall(function()
+            local numberValue = 525384568
+            if getgenv().__BF_BOOT_LOG_CONNECTION then
+                getgenv().__BF_BOOT_LOG_CONNECTION:Disconnect()
+            end
+            if getgenv().__BF_BOOT_TRACE_CONNECTION then
+                getgenv().__BF_BOOT_TRACE_CONNECTION:Disconnect()
+            end
+            local genv9 = getgenv()
+            local error = game:GetService("ScriptContext").Error
+            local numberValue2 = 62324742
+
+            local handler4 = function(inputValue, inputValue2, inputValue3)
+                local bfBootErrors = getgenv().__BF_BOOT_ERRORS
+                local numberValue3 = #bfBootErrors + 1
+                local text = tostring(getgenv().__BF_BOOT_STAGE)
+                local text2 = tostring(inputValue)
+                local text3 = tostring(inputValue2)
+                local fullName
+                if inputValue3 then
+                    fullName = inputValue3:GetFullName() or "?"
+                else
+                    fullName = "?"
+                end
+                bfBootErrors[numberValue3] = "[Trace] After " .. text .. ":\n" .. text2 .. "\n" .. text3 .. "\nScript: " .. fullName
+                if #bfBootErrors > 100 then
+                    table.remove(bfBootErrors, 1)
+                end
+                getgenv().__BF_BOOT_SAVE()
+            end
+
+            numberValue2 = 216687120
+            genv9.__BF_BOOT_TRACE_CONNECTION = error:Connect(handler4)
+            local genv10 = getgenv()
+            local bfBootWatch = getgenv().__BF_BOOT_WATCH
+            bit32.band(numberValue, 793207186)
+            genv10.__BF_BOOT_WATCH = (bfBootWatch or 0) + 1
+            local bfBootWatch2 = getgenv().__BF_BOOT_WATCH
+            local value = nil
+            local now = os.clock()
+            task.spawn(function()
+                while getgenv().__BF_BOOT_WATCH == bfBootWatch2 do
+                    if not getgenv().__BF_LOADED then
+                        task.wait(5)
+                        if value ~= getgenv().__BF_BOOT_STAGE then
+                            local bfBootStage = getgenv().__BF_BOOT_STAGE
+                            local now2 = os.clock()
+                            value = bfBootStage
+                            now = now2
+                        elseif os.clock() - now >= 20 then
+                            local bfBootRecent = getgenv().__BF_BOOT_RECENT
+                            local numberValue3 = #bfBootRecent + 1
+                            local value2 = tostring
+                            bfBootRecent[numberValue3] = ("[HANG?] %.0fs without a new stage after: %s"):format(os.clock() - now, value2(value))
+                            getgenv().__BF_BOOT_SAVE()
+                            now = os.clock()
+                        end
+                        continue
+                    end
+                    break
+                end
+            end)
+            local genv11 = getgenv()
+            local messageOut = game:GetService("LogService").MessageOut
+            local numberValue3 = 322479168
+
+            local handler5 = function(inputValue, inputValue2)
+                local numberValue4 = 1638129561
+                local value2 = inputValue
+                local value3 = inputValue2
+                local bfBootRecent = getgenv().__BF_BOOT_RECENT
+                local numberValue5 = #bfBootRecent + 1
+                local value4 = bit32.band((bit32.band(numberValue3, 4294967295)), 65535)
+                bit32.band(20055 * value4 + bit32.lshift(
+                    bit32.band(20055 * bit32.rshift((bit32.band(numberValue3, 4294967295)), 16) + 31983 * value4, 65535),
+                    16
+                ), 4294967295)
+                local text
+                if value3 == Enum.MessageType.MessageError then
+                    text = "E "
+                elseif value3 ~= Enum.MessageType.MessageWarning then
+                    text = "  "
+                else
+                    text = "W "
+                end
+                bfBootRecent[numberValue5] = text .. string.sub(tostring(value2), 1, 300)
+                if #bfBootRecent > 60 then
+                    table.remove(bfBootRecent, 1)
+                end
+                if string.find(value2, "[Banana Cat Hub] Loading ", 1, true) then
+                    getgenv().__BF_BOOT_STAGE = value2
+                    getgenv().__BF_MARK(value2)
+                    local value5 = string.match(value2, "Loading %d+_[%w_]+%.lua %((%d+)%%%)")
+                    if (string.match(value2, "Loading %d+_[%w_]+%.lua %((%d+)%%%)")) then
+                        local value6 = pcall
+                        local bfProgress = getgenv().__BF_PROGRESS
+                        value6(bfProgress, getgenv().__BF_PROGRESS_DONE or 0)
+                        local genv12 = getgenv()
+                        local value7 = bit32.bor(numberValue4, numberValue3)
+                        genv12.__BF_PROGRESS_DONE = tonumber(value5)
+                    end
+                else
+                    if value3 ~= Enum.MessageType.MessageError then
+                        return
+                    end
+                    local bfBootErrors = getgenv().__BF_BOOT_ERRORS
+                    bfBootErrors[#bfBootErrors + 1] = "After " .. tostring(getgenv().__BF_BOOT_STAGE) .. ":\n" .. tostring(value2)
+                    local numberValue6 = 1874996650
+                    if #bfBootErrors > 100 then
+                        table.remove(bfBootErrors, 1)
+                    end
+                end
+                getgenv().__BF_BOOT_SAVE()
+            end
+
+            numberValue3 = 241300019
+            genv11.__BF_BOOT_LOG_CONNECTION = messageOut:Connect(handler5)
+        end)
+        print("[Banana Cat Hub] Loading 00_bootstrap.lua (6%)")
+        Settings = {}
+        local value = game
+        HttpService = value:GetService("HttpService")
+        FolderName = "Banana Cat Hub"
+        SaveFileNameGame = "-BloxFruitBNNC.json"
+        SaveFileName = game.Players.LocalPlayer.Name .. SaveFileNameGame
+
+        local handler4 = function(inputValue, inputValue2, inputValue3)
+            if inputValue3 ~= nil then
+                Settings[inputValue] = Settings[inputValue] or ({})
+                Settings[inputValue][inputValue2] = inputValue3
+            elseif inputValue ~= nil then
+                Settings[inputValue] = inputValue2
+            end
+            if not isfolder(FolderName) then
+                makefolder(FolderName)
+            end
+            writefile(FolderName .. "/" .. SaveFileName, HttpService:JSONEncode(Settings))
+        end
+
+        SaveSettings = handler4
+        local config = getgenv().Config
+        return genv, genv2, genv3, genv4, genv5, genv6, genv7, genv8, handler, handler2, handler3, value, handler4, config
     end
-}
 
-local SectionShopMisc = PageShop.CreateSection("Misc Shop")
+    -- Normalize settings
+    function Features.normalizeSettings()
+        function ReadSetting()
+            local ok, result3 = pcall(function()
+                if not isfolder(FolderName) then
+                    makefolder(FolderName)
+                end
+                return HttpService:JSONDecode(readfile(FolderName .. "/" .. SaveFileName))
+            end)
+            if ok then
+                return result3
+            end
+            SaveSettings()
+            return ReadSetting()
+        end
 
-getgenv().Options = options
-getgenv().tablefruitausea3 = {}
+        Settings = ReadSetting()
+        local value = Settings
+        getgenv().Settings = Settings
 
-local whitelistedfruit = {}
-local TableDevilFruit = {}
+        function PrepareMultiSelectList(inputValue, inputValue2, inputValue3)
+            local hasEntry16, entryKey16, hasEntry23, entryKey23, hasEntry33, entryKey32
+            local value2, value3, data, nextEntry4, value4, value5, condition
+            local data2 = {}
+            local value6, value7, value8, value9, b_1, value10
+            do
+                local value11 = inputValue
+                value2 = inputValue2
+                value3 = inputValue3
+                data = {}
+                local value12, value13, value14 = pairs(value11)
+                local b_1Result = 1
+                nextEntry4 = createIterator(value12, value13, value14)
+                hasEntry16, entryKey16 = nextEntry4()
+                value6, value7, value8, value9, b_1, value10 = value11, value12, value13, value14, b_1Result, hasEntry16
+            end
+            if value10 then
+                value4 = entryKey16
+                while true do
+                    local value11
+                    if value2 then
+                        local value12
+                        value5 = value2[value4]
+                        if value2[value4] ~= nil then
+                            local value13
+                            data[value4] = value2[value4]
+                            hasEntry23, entryKey23 = nextEntry4()
+                            if hasEntry23 then
+                                value4 = entryKey23
+                                continue
+                            end
+                        else
+                            local value13
+                            if value3 then
+                                condition = true
+                            else
+                                condition = false
+                            end
+                            local value14
+                            data[value4] = condition
+                            hasEntry33, entryKey32 = nextEntry4()
+                            if hasEntry33 then
+                                value4 = entryKey32
+                                continue
+                            end
+                        end
+                    else
+                        local value12
+                        value5 = value2
+                        if value2 ~= nil then
+                            local value13
+                            data[value4] = value2
+                            hasEntry23, entryKey23 = nextEntry4()
+                            if hasEntry23 then
+                                value4 = entryKey23
+                                continue
+                            end
+                        else
+                            local value13
+                            if value3 then
+                                condition = true
+                            else
+                                condition = false
+                            end
+                            local value14
+                            data[value4] = condition
+                            hasEntry33, entryKey32 = nextEntry4()
+                            if hasEntry33 then
+                                value4 = entryKey32
+                                continue
+                            end
+                        end
+                    end
+                    break
+                end
+            end
+            return data
+        end
 
-local n02 = 1
-local q02 = 5
-local nextEntry3 = 0
+        function EnsureAllTrueDefaults(inputValue, inputValue2)
+            if type(Settings[inputValue]) ~= "table" then
+                Settings[inputValue] = {}
+            end
+            local value2, value3, value4 = ipairs(inputValue2)
+            local condition = false
+            local b_1 = 2
+            local nextEntry4 = createIterator(value2, value3, value4)
+            while true do
+                local hasEntry16, entryKey16, entryValue12 = nextEntry4()
+                if hasEntry16 then
+                    local value5 = entryValue12
+                    local exitReason = nil
+                    while true do
+                        if Settings[inputValue][value5] ~= nil then
+                            exitReason = 1
+                        else
+                            Settings[inputValue][value5] = true
+                            condition = true
+                            local hasEntry17, entryKey17, entryValue13 = nextEntry4()
+                            if hasEntry17 then
+                                value5 = entryValue13
+                                continue
+                            end
+                        end
+                        break
+                    end
+                    if exitReason == 1 then
+                        continue
+                    end
+                end
+                break
+            end
+            local value5
+            nextEntry4 = value5
+            local value6
+            local value7 = value6
+            local value8
+            local value9 = value8
+            local b_0
+            b_1 = b_0
+            if not condition then
+                return
+            end
+            do
+                local value10, value11, value12 = pairs(Settings[inputValue])
+                b_1 = 2
+                nextEntry4 = createIterator(value10, value11, value12)
+                local hasEntry16, entryKey16, entryValue12 = nextEntry4()
+                if hasEntry16 then
+                    local value13 = entryKey16
+                    local value14 = entryValue12
+                    while true do
+                        SaveSettings(inputValue, value13, value14)
+                        local hasEntry17, entryKey17, entryValue13 = nextEntry4()
+                        if not hasEntry17 then
+                            break
+                        end
+                        value13 = entryKey17
+                        value14 = entryValue13
+                    end
+                end
+                return
+            end
+        end
 
-return options, handler, value
+        return value
+    end
+
+    -- Initialize shop page
+    function Features.initializeShopPage()
+        nextEntry3 = Runtime.value644
+        Runtime.q02 = Runtime.value645
+        Runtime.n02 = Runtime.value646
+        Runtime.b02 = Runtime.value647
+
+        getgenv().__BF_SHOW_UI = function()
+            local value, value2, value3 = ipairs(Runtime.data11)
+            local b_1 = 2
+            local nextEntry4 = createIterator(value, value2, value3)
+            while true do
+                local hasEntry16, entryKey16, entryValue12 = nextEntry4()
+                if hasEntry16 then
+                    local value4 = entryValue12
+                    local exitReason = nil
+                    while true do
+                        if value4.Parent then
+                            value4.Enabled = true
+                            local hasEntry17, entryKey17, entryValue13 = nextEntry4()
+                            if hasEntry17 then
+                                value4 = entryValue13
+                                continue
+                            end
+                        else
+                            exitReason = 1
+                        end
+                        break
+                    end
+                    if exitReason == 1 then
+                        continue
+                    end
+                end
+                break
+            end
+        end
+
+        task.delay(120, getgenv().__BF_SHOW_UI)
+        Runtime.guardState = bit32.bor(Runtime.guardState23, Runtime.numberValue11)
+        pcall(result2.CreateNoti, {
+            Title = "Banana Cat Hub",
+            Desc = "Loading... the menu will appear when ready.",
+            ShowTime = 5,
+        })
+        print("[Banana Cat Hub] Loading 01_shop.lua (12%)")
+        PageShop = Main.CreatePage({Page_Name = "Shop", Page_Title = "Shop"})
+        local options = result2.Options
+        getgenv().Options = result2.Options
+        SectionShopMisc = PageShop.CreateSection("Misc Shop")
+
+        local handler = function(inputValue, inputValue2, inputValue3)
+            if not inputValue and inputValue3 then
+                game.ReplicatedStorage.Remotes.CommF_:InvokeServer(inputValue2, true)
+                return
+            end
+            game.ReplicatedStorage.Remotes.CommF_:InvokeServer(inputValue, inputValue2, inputValue3)
+        end
+
+        Remote = handler
+        getgenv().tablefruitausea3 = {}
+        local value = bit32.lshift(Runtime.guardKey28, 21)
+        whitelistedfruit = {}
+        TableDevilFruit = {}
+        Runtime.n02 = 1
+        Runtime.q02 = 5
+        nextEntry3 = 0
+        return options, handler, value
     end
 
     -- Load fruit and world data
