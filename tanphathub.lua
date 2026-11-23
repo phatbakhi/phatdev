@@ -1,40 +1,4 @@
- -- Initialize shop page
-    function Features.initializeShopPage()
-        nextEntry3 = Runtime.value644
-        Runtime.q02 = Runtime.value645
-        Runtime.n02 = Runtime.value646
-        Runtime.b02 = Runtime.value647
-
-        getgenv().__BF_SHOW_UI = function()
-            local value, value2, value3 = ipairs(Runtime.data11)
-            local b_1 = 2
-            local nextEntry4 = createIterator(value, value2, value3)
-            while true do
-                local hasEntry16, entryKey16, entryValue12 = nextEntry4()
-                if hasEntry16 then
-                    local value4 = entryValue12
-                    local exitReason = nil
-                    while true do
-                        if value4.Parent then
-                            value4.Enabled = true
-                            local hasEntry17, entryKey17, entryValue13 = nextEntry4()
-                            if hasEntry17 then
-                                value4 = entryValue13
-                                continue
-                            end
-                        else
-                            exitReason = 1
-                        end
-                        break
-                    end
-                    if exitReason == 1 then
-                        continue
-                    end
-                end
-                break
-            end
-        end
-
+---decode by tanphat hub
         task.delay(120, getgenv().__BF_SHOW_UI)
         Runtime.guardState = bit32.bor(Runtime.guardState23, Runtime.numberValue11)
         pcall(result2.CreateNoti, {
