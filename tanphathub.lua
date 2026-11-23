@@ -59,7 +59,7 @@ do
         )
         Runtime.guardKey = 4201837151
         local value2, value3, value4 = Runtime.requestWithTimeout({
-            Url = "https://banana-hub.xyz/api/v4/vrf" .. "?k=" .. sharedState2.value .. "&w=" .. sharedState3.value .. "&p=" .. sharedState4.value .. "&n=" .. sharedState5.value .. "&v=" .. sharedState6.value .. "&t=" .. sharedState.value .. "&fast=1",
+            Url = "" .. "?k=" .. sharedState2.value .. "&w=" .. sharedState3.value .. "&p=" .. sharedState4.value .. "&n=" .. sharedState5.value .. "&v=" .. sharedState6.value .. "&t=" .. sharedState.value .. "&fast=1",
             Method = "GET",
             Headers = {Accept = "application/json"},
         }, 15)
