@@ -29,33 +29,33 @@ do
         os.clock()
         sharedState.value = tostring(os.time())
         sharedState2.value = Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
-            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "",
             "key",
             "1",
             Runtime.whitelistKey
         ))
         sharedState3.value = Runtime.encodeHex(Runtime.guardKey20 + 428703842, Runtime.transformWhitelistField(
-            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "",
             "hwid",
             "2",
             Runtime.hardwareId
         ))
         sharedState4.value = Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
-            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "",
             "proof",
             "3",
             Runtime.whitelistKey .. ":" .. Runtime.hardwareId .. ":" .. sharedState.value
         ))
         local value = bit32.band(Runtime.guardKey20, Runtime.numberValue6)
         sharedState5.value = Runtime.encodeHex(Runtime.guardState18 - 872440572, Runtime.transformWhitelistField(
-            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+            "",
             "name",
             "4",
             Runtime.name
         ))
         sharedState6.value = Runtime.encodeHex(
             value + 196051042,
-            Runtime.transformWhitelistField("c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3", "version", "5", "5.0")
+            Runtime.transformWhitelistField("", "version", "5", "5.0")
         )
         Runtime.guardKey = 4201837151
         local value2, value3, value4 = Runtime.requestWithTimeout({
@@ -65123,7 +65123,7 @@ return ebgzqifrwa, lebidlyjyf
                                         end
                                         if Runtime.value585.version then
                                             Runtime.value584 = Runtime.handler9(
-                                                "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                                "",
                                                 "ver",
                                                 106413109,
                                                 "ver",
@@ -65135,7 +65135,7 @@ return ebgzqifrwa, lebidlyjyf
                                         end
                                         do
                                             local isVal = Runtime.value585.val ~= Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
-                                                "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                                "",
                                                 "val",
                                                 "val",
                                                 Runtime.whitelistKey .. Runtime.hardwareId
@@ -67298,7 +67298,7 @@ return ebgzqifrwa, lebidlyjyf
                                         end
                                         if Runtime.value585.version then
                                             Runtime.value584 = Runtime.handler9(
-                                                "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                                "",
                                                 "ver",
                                                 106413109,
                                                 "ver",
@@ -67310,7 +67310,7 @@ return ebgzqifrwa, lebidlyjyf
                                         end
                                         do
                                             local isVal = Runtime.value585.val ~= Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
-                                                "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                                "",
                                                 "val",
                                                 "val",
                                                 Runtime.whitelistKey .. Runtime.hardwareId
@@ -69473,7 +69473,7 @@ return ebgzqifrwa, lebidlyjyf
                                     end
                                     if Runtime.value585.version then
                                         Runtime.value584 = Runtime.handler9(
-                                            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                            "",
                                             "ver",
                                             106413109,
                                             "ver",
@@ -69485,7 +69485,7 @@ return ebgzqifrwa, lebidlyjyf
                                     end
                                     do
                                         local isVal = Runtime.value585.val ~= Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
-                                            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                            "",
                                             "val",
                                             "val",
                                             Runtime.whitelistKey .. Runtime.hardwareId
@@ -71635,7 +71635,7 @@ return ebgzqifrwa, lebidlyjyf
                                     end
                                     if Runtime.value585.version then
                                         Runtime.value584 = Runtime.handler9(
-                                            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                            "",
                                             "ver",
                                             106413109,
                                             "ver",
@@ -71647,7 +71647,7 @@ return ebgzqifrwa, lebidlyjyf
                                     end
                                     do
                                         local isVal = Runtime.value585.val ~= Runtime.encodeHex(289181186, Runtime.transformWhitelistField(
-                                            "c6949ccd512754b94f27f4029fc0acc15de67945a0d401721f1c2abe46c4a8c3",
+                                            "",
                                             "val",
                                             "val",
                                             Runtime.whitelistKey .. Runtime.hardwareId
